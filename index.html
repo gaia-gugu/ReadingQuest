@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Reading Quest</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cosmos-bg:#0a0a1a;--cosmos-card:#1a1a35;--cosmos-accent:#7c6fcd;
+  --cosmos-gold:#f5c842;--cosmos-pink:#e879a0;--cosmos-text:#e8e4ff;
+  --forest-bg:#111a0a;--forest-card:#182010;--forest-accent:#7abf5e;
+  --forest-gold:#c9933a;--forest-warm:#e8855a;--forest-text:#e4edd8;
+  --quest-bg:#120918;--quest-card:#1e0e2c;--quest-accent:#d45a28;
+  --quest-gold:#f0b830;--quest-blue:#4a8edf;--quest-text:#f0e8ff;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;min-height:100vh;min-height:-webkit-fill-available;overflow-x:hidden;transition:background 0.6s ease}
+
+/* COSMOS */
+body.cosmos{background:var(--cosmos-bg);color:var(--cosmos-text)}
+body.cosmos::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 25% 15%,rgba(124,111,205,0.2) 0%,transparent 55%),
+  radial-gradient(ellipse at 78% 88%,rgba(232,121,160,0.12) 0%,transparent 48%)}
+
+/* FOREST */
+body.forest{background:var(--forest-bg);color:var(--forest-text)}
+body.forest::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 0%,rgba(50,90,15,0.4) 0%,transparent 55%),
+  radial-gradient(ellipse at 100% 100%,rgba(200,140,50,0.07) 0%,transparent 40%)}
+
+/* QUEST */
+body.quest{background:var(--quest-bg);color:var(--quest-text)}
+body.quest::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 18% 18%,rgba(180,60,20,0.2) 0%,transparent 50%),
+  radial-gradient(ellipse at 82% 82%,rgba(74,142,223,0.1) 0%,transparent 48%)}
+
+/* AMBIENT */
+.ambient-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+
+/* Stars */
+.star{position:absolute;border-radius:50%;background:#fff;
+  animation:twinkle var(--dur,3s) ease-in-out infinite var(--delay,0s)}
+@keyframes twinkle{0%,100%{opacity:var(--mo,.3);transform:scale(1)}50%{opacity:1;transform:scale(1.5)}}
+.shooting-star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;
+  box-shadow:0 0 5px 2px rgba(255,255,255,0.7);
+  animation:shoot var(--dur,7s) linear var(--delay,0s) infinite}
+@keyframes shoot{0%{transform:translate(0,0) scaleX(1);opacity:0}
+  5%{opacity:1}20%{transform:translate(160px,160px) scaleX(30);opacity:0}100%{opacity:0}}
+
+/* Forest elements */
+.forest-float{position:absolute;animation:fFloat var(--dur,8s) ease-in-out infinite var(--delay,0s);opacity:var(--op,.3)}
+@keyframes fFloat{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-16px) rotate(calc(var(--r,0deg)+10deg))}}
+.forest-tree-bg{position:absolute;bottom:0;pointer-events:none;opacity:0.1;font-size:var(--sz,64px);line-height:1}
+
+/* Quest sparks */
+.quest-spark{position:absolute;animation:qSpark var(--dur,5s) ease-in-out infinite var(--delay,0s);opacity:var(--op,.2)}
+@keyframes qSpark{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-12px) scale(1.2)}}
+
+/* Cosmos moon orb */
+.cosmos-moon-orb{position:fixed;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle at 38% 38%,#fef8c0,#e8c840 40%,#8a6010 100%);
+  opacity:0.065;pointer-events:none;z-index:0;
+  box-shadow:0 0 80px 30px rgba(245,200,66,0.12);
+  animation:moonPulse 7s ease-in-out infinite}
+@keyframes moonPulse{0%,100%{opacity:0.065}50%{opacity:0.09}}
+
+/* Forest canopy overlay */
+.forest-canopy-bar{position:fixed;top:0;left:0;right:0;height:70px;pointer-events:none;z-index:0;
+  background:linear-gradient(to bottom,rgba(5,12,2,0.55),transparent)}
+.forest-floor-bar{position:fixed;bottom:0;left:0;right:0;height:100px;pointer-events:none;z-index:0;
+  background:linear-gradient(to top,rgba(5,10,2,0.6),transparent)}
+
+/* Quest castle silhouette */
+.quest-castle-wrap{position:fixed;bottom:0;right:0;pointer-events:none;z-index:0;opacity:0.045;color:var(--quest-text)}
+
+/* LAYOUT */
+#app{position:relative;z-index:1;min-height:100vh}
+.screen{display:none;min-height:100vh;padding:20px;animation:fadeIn 0.45s ease}
+.screen.active{display:flex;flex-direction:column}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* ONBOARDING */
+#onboarding{justify-content:center;align-items:center;text-align:center;gap:26px;padding:36px 22px}
+.onboard-hero{font-size:5rem;display:block;animation:heroBob 2.5s ease-in-out infinite;
+  filter:drop-shadow(0 0 22px rgba(255,255,255,0.25))}
+@keyframes heroBob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.06)}}
+.onboard-title{font-family:'Cinzel',serif;font-size:clamp(1.8rem,5.5vw,2.8rem);font-weight:700;line-height:1.1;
+  background:linear-gradient(135deg,#a090e8,#e879a0,#f5c842);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  animation:shimmer 4s ease-in-out infinite}
+@keyframes shimmer{0%,100%{filter:brightness(1)}50%{filter:brightness(1.28)}}
+.onboard-sub{font-size:1rem;opacity:0.6;max-width:320px;line-height:1.65}
+
+.name-input-wrap{width:100%;max-width:320px}
+.name-input{width:100%;padding:16px 22px;background:rgba(255,255,255,0.13);
+  border:2px solid rgba(255,255,255,0.26);border-radius:18px;
+  font-family:'Nunito',sans-serif;font-size:1.2rem;font-weight:700;
+  color:#fff;text-align:center;outline:none;transition:all 0.3s;-webkit-text-fill-color:#fff}
+.name-input:focus{border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.2)}
+.name-input::placeholder{color:rgba(255,255,255,0.38);-webkit-text-fill-color:rgba(255,255,255,0.38);font-weight:400}
+
+.theme-picker{width:100%;max-width:400px}
+.theme-picker h3{font-size:0.75rem;text-transform:uppercase;letter-spacing:2.5px;opacity:0.5;margin-bottom:12px}
+.theme-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.theme-card{padding:16px 9px;border-radius:17px;border:2px solid transparent;cursor:pointer;transition:all 0.3s;text-align:center}
+.theme-card:hover{transform:translateY(-4px)}
+.theme-card.selected{border-color:rgba(255,255,255,0.55);transform:translateY(-5px)}
+.theme-card .theme-icon{font-size:2rem;display:block;margin-bottom:7px}
+.theme-card .theme-name{font-size:0.77rem;font-weight:700;opacity:0.9}
+.theme-card .theme-desc{font-size:0.66rem;opacity:0.48;margin-top:3px}
+.theme-card[data-theme="cosmos"]{background:linear-gradient(145deg,rgba(10,10,28,0.9),rgba(124,111,205,0.22))}
+.theme-card[data-theme="forest"]{background:linear-gradient(145deg,rgba(12,18,6,0.9),rgba(122,191,94,0.18))}
+.theme-card[data-theme="quest"]{background:linear-gradient(145deg,rgba(18,8,28,0.9),rgba(212,90,40,0.2))}
+
+.avatar-picker{width:100%;max-width:400px}
+.avatar-picker h3{font-size:0.75rem;text-transform:uppercase;letter-spacing:2.5px;opacity:0.5;margin-bottom:12px}
+.avatars{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+.avatar-opt{width:56px;height:56px;border-radius:50%;border:3px solid transparent;cursor:pointer;font-size:1.7rem;
+  display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.08);transition:all 0.3s}
+.avatar-opt:hover{transform:scale(1.1)}
+.avatar-opt.selected{border-color:rgba(255,255,255,0.65);background:rgba(255,255,255,0.18);transform:scale(1.15)}
+
+.btn-primary{padding:15px 42px;border-radius:50px;border:none;cursor:pointer;
+  font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:800;transition:all 0.3s;letter-spacing:0.4px}
+body.cosmos .btn-primary{background:linear-gradient(135deg,var(--cosmos-accent),var(--cosmos-pink));color:#fff}
+body.forest .btn-primary{background:linear-gradient(135deg,var(--forest-accent),var(--forest-gold));color:#0c1508}
+body.quest .btn-primary{background:linear-gradient(135deg,var(--quest-accent),var(--quest-gold));color:#fff}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,0,0,0.35)}
+.btn-primary:disabled{opacity:0.28;transform:none;cursor:not-allowed}
+
+/* HEADER */
+.app-header{display:flex;align-items:center;justify-content:space-between;padding:12px 0 18px}
+.header-left{display:flex;align-items:center;gap:10px}
+.header-avatar{font-size:1.85rem;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;background:rgba(255,255,255,0.1);flex-shrink:0}
+.header-name{font-family:'Cinzel',serif;font-size:1rem;font-weight:600}
+.header-realm{font-size:0.68rem;opacity:0.42;margin-top:1px}
+.header-right{display:flex;gap:7px}
+.icon-btn{width:39px;height:39px;border-radius:50%;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:1.05rem;
+  background:rgba(255,255,255,0.08);color:inherit;transition:all 0.2s}
+.icon-btn:hover{background:rgba(255,255,255,0.16);transform:scale(1.07)}
+
+/* COMPANION BAR */
+.companion-bar{border-radius:17px;padding:13px 15px;margin-bottom:18px;
+  display:flex;align-items:center;gap:11px;border:1px solid rgba(255,255,255,0.08);position:relative;overflow:hidden}
+body.cosmos .companion-bar{background:linear-gradient(135deg,rgba(124,111,205,0.14),rgba(232,121,160,0.07))}
+body.forest .companion-bar{background:linear-gradient(135deg,rgba(122,191,94,0.11),rgba(201,147,58,0.07))}
+body.quest .companion-bar{background:linear-gradient(135deg,rgba(212,90,40,0.13),rgba(240,184,48,0.07))}
+.companion-emoji{font-size:1.9rem;flex-shrink:0;animation:cBob 3.2s ease-in-out infinite}
+@keyframes cBob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-5px) rotate(3deg)}}
+.companion-greeting{font-size:0.82rem;font-weight:700;line-height:1.4}
+.companion-flavour{font-size:0.7rem;opacity:0.52;margin-top:2px;font-style:italic}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:22px}
+.stat-card{padding:13px 9px;border-radius:15px;background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.07);text-align:center}
+.stat-value{font-family:'Cinzel',serif;font-size:1.65rem;font-weight:700}
+.stat-label{font-size:0.62rem;opacity:0.48;text-transform:uppercase;letter-spacing:1.2px;margin-top:2px}
+body.cosmos .stat-value{color:var(--cosmos-gold)}
+body.forest .stat-value{color:var(--forest-gold)}
+body.quest .stat-value{color:var(--quest-gold)}
+
+/* SECTION */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
+.section-title{font-family:'Cinzel',serif;font-size:0.85rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;opacity:0.68}
+.btn-add{padding:6px 15px;border-radius:50px;border:1px solid rgba(255,255,255,0.17);
+  background:rgba(255,255,255,0.05);color:inherit;cursor:pointer;
+  font-family:'Nunito',sans-serif;font-size:0.8rem;font-weight:700;transition:all 0.2s}
+.btn-add:hover{background:rgba(255,255,255,0.12)}
+
+/* BOOK CARDS */
+.books-list{display:flex;flex-direction:column;gap:11px;flex:1;padding-bottom:22px}
+.book-card{padding:17px 17px 17px 22px;border-radius:19px;background:rgba(255,255,255,0.052);
+  border:1px solid rgba(255,255,255,0.085);cursor:pointer;transition:all 0.28s;
+  position:relative;overflow:hidden}
+/* Left accent strip */
+.book-card::before{content:'';position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:0 3px 3px 0;transition:all 0.3s}
+body.cosmos .book-card::before{background:linear-gradient(to bottom,var(--cosmos-accent),var(--cosmos-pink))}
+body.forest .book-card::before{background:linear-gradient(to bottom,var(--forest-accent),var(--forest-gold))}
+body.quest .book-card::before{background:linear-gradient(to bottom,var(--quest-accent),var(--quest-gold))}
+/* Shimmer overlay */
+.book-card::after{content:'';position:absolute;inset:0;border-radius:19px;pointer-events:none;
+  background:linear-gradient(135deg,rgba(255,255,255,0.022),transparent 60%)}
+.book-card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,0.17)}
+.book-card.completed{opacity:0.58}
+body.cosmos .book-card.completed{border-color:rgba(245,200,66,0.18);background:rgba(245,200,66,0.035)}
+body.forest .book-card.completed{border-color:rgba(201,147,58,0.18);background:rgba(201,147,58,0.035)}
+body.quest .book-card.completed{border-color:rgba(240,184,48,0.18);background:rgba(240,184,48,0.035)}
+body.cosmos .book-card.completed::before{background:var(--cosmos-gold)}
+body.forest .book-card.completed::before{background:var(--forest-gold)}
+body.quest .book-card.completed::before{background:var(--quest-gold)}
+
+.book-card-top{display:flex;align-items:flex-start;gap:11px;margin-bottom:11px}
+.book-icon-wrap{flex-shrink:0;width:42px;height:42px;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;font-size:1.7rem;
+  background:rgba(255,255,255,0.07)}
+.book-info{flex:1;min-width:0}
+.book-title{font-family:'Cinzel',serif;font-size:0.92rem;font-weight:600;margin-bottom:2px;line-height:1.3}
+.book-author{font-size:0.7rem;opacity:0.42;font-style:italic;margin-bottom:3px}
+.book-meta{font-size:0.7rem;opacity:0.48}
+.book-status-badge{padding:3px 9px;border-radius:50px;font-size:0.63rem;font-weight:700;white-space:nowrap;letter-spacing:0.4px}
+.status-on-track{background:rgba(100,200,100,0.14);color:#6dc86d}
+.status-behind{background:rgba(255,100,100,0.14);color:#ff7070}
+.status-ahead{background:rgba(100,150,255,0.14);color:#70a0ff}
+.status-done{background:rgba(200,150,50,0.18);color:#f5c842}
+.status-not-started{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.36)}
+
+.progress-bar-bg{height:6px;border-radius:10px;background:rgba(255,255,255,0.09);overflow:hidden;margin-bottom:5px}
+.progress-bar-fill{height:100%;border-radius:10px;transition:width 0.7s cubic-bezier(0.34,1.56,0.64,1)}
+body.cosmos .progress-bar-fill{background:linear-gradient(90deg,var(--cosmos-accent),var(--cosmos-pink))}
+body.forest .progress-bar-fill{background:linear-gradient(90deg,var(--forest-accent),var(--forest-gold))}
+body.quest .progress-bar-fill{background:linear-gradient(90deg,var(--quest-accent),var(--quest-gold))}
+.progress-text{font-size:0.7rem;opacity:0.52}
+
+.book-footer{display:flex;align-items:center;justify-content:space-between;margin-top:9px}
+.lesson-date{font-size:0.7rem;opacity:0.46}
+.audiobook-tag{font-size:0.66rem;opacity:0.42;display:flex;align-items:center;gap:3px}
+
+.empty-state{text-align:center;padding:48px 18px;opacity:0.42}
+.empty-icon{font-size:3.2rem;display:block;margin-bottom:12px}
+.empty-text{font-size:0.92rem;line-height:1.65}
+
+/* BOOK DETAIL */
+#book-detail{gap:0}
+.back-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:none;color:inherit;
+  cursor:pointer;font-family:'Nunito',sans-serif;font-size:0.86rem;opacity:0.52;padding:0;
+  margin-bottom:18px;transition:opacity 0.2s}
+.back-btn:hover{opacity:1}
+
+.detail-header-card{border-radius:21px;padding:20px 18px;margin-bottom:18px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.09)}
+body.cosmos .detail-header-card{background:linear-gradient(135deg,rgba(124,111,205,0.17),rgba(232,121,160,0.09))}
+body.forest .detail-header-card{background:linear-gradient(135deg,rgba(122,191,94,0.13),rgba(201,147,58,0.09))}
+body.quest .detail-header-card{background:linear-gradient(135deg,rgba(212,90,40,0.17),rgba(240,184,48,0.09))}
+.detail-header-deco{position:absolute;right:12px;top:8px;font-size:3.8rem;opacity:0.1;pointer-events:none;line-height:1}
+.detail-book-title{font-family:'Cinzel',serif;font-size:clamp(1.2rem,4vw,1.75rem);font-weight:700;line-height:1.2;margin-bottom:3px}
+.detail-book-author{font-size:0.8rem;opacity:0.46;font-style:italic;margin-bottom:9px}
+.detail-flavour{font-size:0.76rem;opacity:0.48;font-style:italic;line-height:1.55;
+  border-left:2px solid rgba(255,255,255,0.14);padding-left:10px}
+
+.detail-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:16px}
+.detail-stat{padding:13px;border-radius:13px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.07)}
+.detail-stat-val{font-family:'Cinzel',serif;font-size:1.35rem;font-weight:700}
+.detail-stat-label{font-size:0.64rem;opacity:0.43;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+body.cosmos .detail-stat-val{color:var(--cosmos-accent)}
+body.forest .detail-stat-val{color:var(--forest-accent)}
+body.quest .detail-stat-val{color:var(--quest-accent)}
+
+.lesson-deadline{padding:11px 15px;border-radius:13px;background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);margin-bottom:16px;
+  display:flex;align-items:center;justify-content:space-between}
+.deadline-label{font-size:0.7rem;opacity:0.46;text-transform:uppercase;letter-spacing:1px}
+.deadline-date{font-family:'Cinzel',serif;font-size:0.92rem;font-weight:600;margin-top:2px}
+.deadline-days{font-size:0.8rem;font-weight:700}
+.days-ok{color:#6dc86d}.days-warn{color:#f5c842}.days-late{color:#ff7070}
+
+.audiobook-info{padding:11px 15px;border-radius:13px;background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.07);margin-bottom:16px;display:flex;align-items:center;gap:9px}
+.ab-icon{font-size:1.3rem}
+.ab-platform{font-size:0.66rem;opacity:0.44;text-transform:uppercase;letter-spacing:1px}
+.ab-time{font-size:0.86rem;font-weight:700}
+
+/* QUEST PATH */
+.quest-path-header{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.quest-path-title{font-family:'Cinzel',serif;font-size:0.82rem;text-transform:uppercase;letter-spacing:2px;opacity:0.62}
+
+/* CHAPTER STONES */
+.chapters-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:8px;margin-bottom:26px}
+.chapter-stone{aspect-ratio:1;border-radius:13px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;
+  border:2px solid rgba(255,255,255,0.085);background:rgba(255,255,255,0.042);
+  gap:2px;position:relative;user-select:none;overflow:hidden}
+.chapter-stone:hover{transform:scale(1.1)}
+.chapter-stone:active{transform:scale(0.93)}
+.chapter-stone.done{border-color:transparent}
+body.cosmos .chapter-stone.done{background:linear-gradient(135deg,var(--cosmos-accent),var(--cosmos-pink))}
+body.forest .chapter-stone.done{background:linear-gradient(135deg,var(--forest-accent),var(--forest-gold))}
+body.quest .chapter-stone.done{background:linear-gradient(135deg,var(--quest-accent),var(--quest-gold))}
+.chapter-stone .ch-icon-bg{font-size:1.2rem;opacity:0.28;transition:opacity 0.2s}
+.chapter-stone.done .ch-icon-bg{opacity:0;position:absolute}
+.chapter-stone.done .ch-tick{display:flex}
+.ch-tick{display:none;font-size:1.3rem;animation:tickPop 0.3s cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes tickPop{from{transform:scale(0)}to{transform:scale(1)}}
+.ch-num{font-family:'Cinzel',serif;font-size:0.86rem;line-height:1}
+.ch-label{font-size:0.56rem;opacity:0.4;letter-spacing:0.5px}
+.chapter-stone.done .ch-num,.chapter-stone.done .ch-label{display:none}
+.chapter-stone.current{animation:stonePulse 2.2s ease-in-out infinite}
+body.cosmos .chapter-stone.current{border-color:var(--cosmos-gold);box-shadow:0 0 14px rgba(245,200,66,0.38)}
+body.forest .chapter-stone.current{border-color:var(--forest-gold);box-shadow:0 0 14px rgba(201,147,58,0.38)}
+body.quest .chapter-stone.current{border-color:var(--quest-gold);box-shadow:0 0 14px rgba(240,184,48,0.38)}
+@keyframes stonePulse{0%,100%{box-shadow:0 0 8px rgba(245,200,66,0.3)}50%{box-shadow:0 0 20px rgba(245,200,66,0.6)}}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.75);
+  display:flex;align-items:flex-end;justify-content:center;padding:14px;
+  backdrop-filter:blur(10px);animation:fadeIn 0.28s ease}
+.modal{width:100%;max-width:510px;border-radius:24px;padding:24px 20px 36px;
+  max-height:92vh;overflow-y:auto;animation:slideUp 0.38s cubic-bezier(0.34,1.56,0.64,1)}
+body.cosmos .modal{background:var(--cosmos-card);border:1px solid rgba(124,111,205,0.28)}
+body.forest .modal{background:var(--forest-card);border:1px solid rgba(122,191,94,0.22)}
+body.quest .modal{background:var(--quest-card);border:1px solid rgba(212,90,40,0.28)}
+@keyframes slideUp{from{transform:translateY(55px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-title{font-family:'Cinzel',serif;font-size:1.15rem;font-weight:700;margin-bottom:20px}
+.form-group{margin-bottom:15px}
+.form-label{font-size:0.73rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;opacity:0.52;margin-bottom:6px;display:block}
+.form-input,.form-select{width:100%;padding:12px 14px;background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.1);border-radius:12px;
+  font-family:'Nunito',sans-serif;font-size:0.96rem;color:inherit;outline:none;transition:all 0.2s;-webkit-appearance:none}
+.form-input:focus,.form-select:focus{border-color:rgba(255,255,255,0.27);background:rgba(255,255,255,0.1)}
+.form-select option{background:#1a1a35}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.lookup-btn{width:100%;padding:10px;border-radius:10px;border:none;cursor:pointer;
+  font-family:'Nunito',sans-serif;font-size:0.86rem;font-weight:700;transition:all 0.2s;
+  margin-top:5px;background:rgba(255,255,255,0.07);color:inherit}
+.lookup-btn:hover{background:rgba(255,255,255,0.13)}
+.lookup-btn:disabled{opacity:0.32;cursor:not-allowed}
+.lookup-result{padding:8px 12px;border-radius:10px;background:rgba(100,200,100,0.09);
+  border:1px solid rgba(100,200,100,0.18);font-size:0.8rem;margin-top:7px;display:none}
+.lookup-result.show{display:block}
+.modal-actions{display:flex;gap:9px;margin-top:20px}
+.btn-cancel{flex:1;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.13);
+  background:transparent;color:inherit;cursor:pointer;font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:700;transition:all 0.2s}
+.btn-cancel:hover{background:rgba(255,255,255,0.06)}
+.btn-save{flex:2;padding:12px;border-radius:12px;border:none;cursor:pointer;
+  font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:800;transition:all 0.28s;color:#fff}
+body.cosmos .btn-save{background:linear-gradient(135deg,var(--cosmos-accent),var(--cosmos-pink))}
+body.forest .btn-save{background:linear-gradient(135deg,var(--forest-accent),var(--forest-gold));color:#0c1508}
+body.quest .btn-save{background:linear-gradient(135deg,var(--quest-accent),var(--quest-gold))}
+.btn-save:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.3)}
+
+/* PARENT */
+#parent-mode{gap:0}
+.parent-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.parent-title{font-family:'Cinzel',serif;font-size:1.35rem;font-weight:700}
+.parent-books{display:flex;flex-direction:column;gap:11px}
+.parent-book-card{padding:15px;border-radius:17px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08)}
+.parent-book-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:9px}
+.parent-book-title{font-family:'Cinzel',serif;font-size:0.92rem;font-weight:600;flex:1;margin-right:9px}
+.parent-book-actions{display:flex;gap:6px}
+.action-btn{width:30px;height:30px;border-radius:50%;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:0.82rem;
+  background:rgba(255,255,255,0.07);color:inherit;transition:all 0.2s}
+.action-btn:hover{background:rgba(255,255,255,0.14)}
+.action-btn.delete{color:#ff7070}
+.reschedule-wrap{display:flex;align-items:center;gap:7px}
+.reschedule-label{font-size:0.73rem;opacity:0.43;white-space:nowrap}
+.reschedule-input{padding:6px 10px;background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.1);border-radius:9px;
+  font-family:'Nunito',sans-serif;font-size:0.86rem;color:inherit;outline:none}
+
+/* SETTINGS */
+#settings-modal{gap:0}
+.settings-section{margin-bottom:24px}
+.settings-title{font-family:'Cinzel',serif;font-size:1.25rem;font-weight:700;margin-bottom:20px}
+.settings-label{font-size:0.73rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;opacity:0.52;margin-bottom:10px;display:block}
+
+/* CELEBRATION */
+.celebration-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,0.83);backdrop-filter:blur(14px);animation:fadeIn 0.38s ease}
+.celebration-card{text-align:center;padding:42px 30px;border-radius:28px;max-width:350px;width:90%;
+  animation:popIn 0.55s cubic-bezier(0.34,1.56,0.64,1)}
+body.cosmos .celebration-card{background:var(--cosmos-card);border:2px solid var(--cosmos-gold)}
+body.forest .celebration-card{background:var(--forest-card);border:2px solid var(--forest-gold)}
+body.quest .celebration-card{background:var(--quest-card);border:2px solid var(--quest-gold)}
+@keyframes popIn{from{transform:scale(0.28) rotate(-12deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+.celebration-emoji{font-size:4.2rem;display:block;margin-bottom:12px;animation:bounce 0.55s ease infinite alternate}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-12px)}}
+.celebration-title{font-family:'Cinzel',serif;font-size:1.55rem;font-weight:700;margin-bottom:9px}
+.celebration-sub{opacity:0.62;margin-bottom:22px;font-size:0.92rem;line-height:1.5}
+.confetti-piece{position:fixed;pointer-events:none;z-index:210;font-size:1.35rem;
+  animation:confettiFall var(--dur,3s) ease-in var(--delay,0s) forwards}
+@keyframes confettiFall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+/* NUDGE */
+.nudge-banner{padding:10px 13px;border-radius:12px;background:rgba(255,80,80,0.1);
+  border:1px solid rgba(255,80,80,0.2);color:#ff9090;font-size:0.8rem;font-weight:600;
+  margin-bottom:13px;display:flex;align-items:center;gap:6px;animation:fadeIn 0.4s ease}
+
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.11);border-radius:3px}
+
+@media(min-width:600px){
+  .screen{padding:24px 32px;max-width:560px;margin:0 auto}
+  .chapters-grid{grid-template-columns:repeat(auto-fill,minmax(74px,1fr))}
+}
+@media(min-width:900px){.screen{padding:32px 44px;max-width:660px}}
+</style>
+</head>
+<body class="cosmos">
+
+<div class="ambient-layer" id="ambientLayer"></div>
+<div class="cosmos-moon-orb" id="cosmosMoon"></div>
+<div class="forest-canopy-bar" id="forestCanopy" style="display:none"></div>
+<div class="forest-floor-bar" id="forestFloor" style="display:none"></div>
+<svg class="quest-castle-wrap" id="questCastle" style="display:none;width:220px;height:175px" viewBox="0 0 220 175" fill="white">
+  <rect x="25" y="85" width="170" height="90" opacity="1"/>
+  <rect x="25" y="62" width="36" height="44"/><rect x="90" y="42" width="40" height="64"/><rect x="159" y="62" width="36" height="44"/>
+  <rect x="25" y="53" width="9" height="13"/><rect x="39" y="53" width="9" height="13"/><rect x="53" y="53" width="7" height="13"/>
+  <rect x="90" y="32" width="9" height="13"/><rect x="103" y="32" width="9" height="13"/><rect x="116" y="32" width="9" height="13"/>
+  <rect x="159" y="53" width="9" height="13"/><rect x="172" y="53" width="9" height="13"/><rect x="185" y="53" width="9" height="13"/>
+  <rect x="96" y="112" width="28" height="43" rx="14"/>
+  <rect x="58" y="97" width="22" height="22" rx="11"/><rect x="140" y="97" width="22" height="22" rx="11"/>
+</svg>
+
+<div id="app">
+
+<!-- ONBOARDING -->
+<div id="onboarding" class="screen active">
+  <span class="onboard-hero" id="onboardHero">🌙</span>
+  <div class="onboard-title">Reading Quest</div>
+  <p class="onboard-sub">Every chapter is a step deeper into the magic.<br>Your adventure begins with a name.</p>
+  <div class="name-input-wrap">
+    <input class="name-input" id="nameInput" type="text" placeholder="What's your name?" maxlength="20" autocomplete="off">
+  </div>
+  <div class="theme-picker">
+    <h3>Choose your realm</h3>
+    <div class="theme-cards">
+      <div class="theme-card selected" data-theme="cosmos" onclick="selectTheme('cosmos',this)">
+        <span class="theme-icon">🌙</span><div class="theme-name">Stars & Cosmos</div><div class="theme-desc">Celestial dreams</div>
+      </div>
+      <div class="theme-card" data-theme="forest" onclick="selectTheme('forest',this)">
+        <span class="theme-icon">🌿</span><div class="theme-name">Enchanted Forest</div><div class="theme-desc">Woodland magic</div>
+      </div>
+      <div class="theme-card" data-theme="quest" onclick="selectTheme('quest',this)">
+        <span class="theme-icon">🏰</span><div class="theme-name">Fantasy Quest</div><div class="theme-desc">Castle & dragons</div>
+      </div>
+    </div>
+  </div>
+  <div class="avatar-picker">
+    <h3>Pick your hero</h3>
+    <div class="avatars" id="avatarPicker"></div>
+  </div>
+  <button class="btn-primary" id="startBtn" onclick="startAdventure()" disabled>Begin My Quest →</button>
+</div>
+
+<!-- HOME -->
+<div id="home" class="screen">
+  <div class="app-header">
+    <div class="header-left">
+      <div class="header-avatar" id="headerAvatar"></div>
+      <div>
+        <div class="header-name" id="headerName"></div>
+        <div class="header-realm" id="headerRealm"></div>
+      </div>
+    </div>
+    <div class="header-right">
+      <button class="icon-btn" onclick="showSettings()">⚙️</button>
+      <button class="icon-btn" onclick="showParentMode()">🔑</button>
+    </div>
+  </div>
+  <div id="nudgeBanner"></div>
+  <div class="companion-bar">
+    <span class="companion-emoji" id="companionEmoji"></span>
+    <div>
+      <div class="companion-greeting" id="companionGreeting"></div>
+      <div class="companion-flavour" id="companionFlavour"></div>
+    </div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-value" id="statBooks">0</div><div class="stat-label" id="statLabel0"></div></div>
+    <div class="stat-card"><div class="stat-value" id="statChapters">0</div><div class="stat-label" id="statLabel1"></div></div>
+    <div class="stat-card"><div class="stat-value" id="statDone">0</div><div class="stat-label" id="statLabel2"></div></div>
+  </div>
+  <div class="section-header">
+    <div class="section-title" id="booksSectionTitle"></div>
+  </div>
+  <div class="books-list" id="booksList"></div>
+</div>
+
+<!-- BOOK DETAIL -->
+<div id="book-detail" class="screen">
+  <button class="back-btn" onclick="showHome()">← Back</button>
+  <div class="detail-header-card">
+    <div class="detail-header-deco" id="detailDeco"></div>
+    <div class="detail-book-title" id="detailTitle"></div>
+    <div class="detail-book-author" id="detailAuthor"></div>
+    <div class="detail-flavour" id="detailFlavour"></div>
+  </div>
+  <div class="detail-stats">
+    <div class="detail-stat"><div class="detail-stat-val" id="detailProgress"></div><div class="detail-stat-label" id="detailProgressLabel"></div></div>
+    <div class="detail-stat"><div class="detail-stat-val" id="detailRemaining"></div><div class="detail-stat-label" id="detailRemainingLabel"></div></div>
+  </div>
+  <div class="lesson-deadline" id="detailDeadline"></div>
+  <div id="detailAudiobook"></div>
+  <div class="quest-path-header">
+    <div class="quest-path-title" id="questPathLabel"></div>
+  </div>
+  <div class="chapters-grid" id="chaptersGrid"></div>
+</div>
+
+<!-- PARENT MODE -->
+<div id="parent-mode" class="screen">
+  <div class="parent-header">
+    <div class="parent-title">🔑 Parent Mode</div>
+    <button class="icon-btn" onclick="showHome()">✕</button>
+  </div>
+  <div class="section-header">
+    <div class="section-title">📚 Manage Books</div>
+    <button class="btn-add" onclick="showAddBook()">+ Add Book</button>
+  </div>
+  <div class="parent-books" id="parentBooksList"></div>
+</div>
+
+<!-- SETTINGS -->
+<div id="settings-modal" class="screen">
+  <div class="app-header">
+    <div class="settings-title">Settings</div>
+    <button class="icon-btn" onclick="showHome()">✕</button>
+  </div>
+  <div class="settings-section">
+    <label class="settings-label">Your Name</label>
+    <input class="form-input" id="settingsName" type="text" maxlength="20">
+  </div>
+  <div class="settings-section">
+    <label class="settings-label">Choose Realm</label>
+    <div class="theme-cards">
+      <div class="theme-card" data-theme="cosmos" onclick="selectThemeSettings('cosmos',this)"><span class="theme-icon">🌙</span><div class="theme-name">Cosmos</div></div>
+      <div class="theme-card" data-theme="forest" onclick="selectThemeSettings('forest',this)"><span class="theme-icon">🌿</span><div class="theme-name">Forest</div></div>
+      <div class="theme-card" data-theme="quest" onclick="selectThemeSettings('quest',this)"><span class="theme-icon">🏰</span><div class="theme-name">Quest</div></div>
+    </div>
+  </div>
+  <div class="settings-section">
+    <label class="settings-label">Your Hero</label>
+    <div class="avatars" id="settingsAvatarPicker"></div>
+  </div>
+  <button class="btn-primary" onclick="saveSettings()" style="width:100%">Save Changes</button>
+  <div style="margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.08)">
+    <button onclick="resetApp()" style="background:none;border:none;color:#ff7070;cursor:pointer;font-family:'Nunito',sans-serif;font-size:0.86rem;font-weight:700;opacity:0.52">Reset all data</button>
+  </div>
+</div>
+
+</div>
+
+<!-- ADD BOOK MODAL -->
+<div class="modal-overlay" id="addBookModal" style="display:none" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-title" id="modalTitle">📖 Add a New Book</div>
+    <div class="form-group">
+      <label class="form-label">Book Title</label>
+      <input class="form-input" id="bookTitleInput" type="text" placeholder="e.g. The Lion, the Witch and the Wardrobe" autocomplete="off">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Author</label>
+      <input class="form-input" id="bookAuthorInput" type="text" placeholder="e.g. C.S. Lewis" autocomplete="off">
+      <button class="lookup-btn" id="lookupBtn" onclick="lookupChapters()">🔍 Auto-lookup chapter count (uses title + author)</button>
+      <div class="lookup-result" id="lookupResult"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Chapters</label>
+        <input class="form-input" id="chaptersInput" type="number" min="1" max="200" placeholder="e.g. 17">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Lesson Date</label>
+        <input class="form-input" id="lessonDateInput" type="date">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Audiobook (optional)</label>
+      <div class="form-row">
+        <select class="form-select" id="audioPlatform">
+          <option value="">No audiobook</option>
+          <option value="Libby">📚 Libby</option>
+          <option value="Audible">🎧 Audible</option>
+          <option value="YouTube">▶️ YouTube</option>
+        </select>
+        <div style="display:flex;gap:6px;align-items:center">
+          <input class="form-input" id="audioHours" type="number" min="0" max="99" placeholder="0" style="width:52px;text-align:center;padding:12px 5px">
+          <span style="opacity:0.42;font-size:0.8rem">h</span>
+          <input class="form-input" id="audioMinutes" type="number" min="0" max="59" placeholder="0" style="width:52px;text-align:center;padding:12px 5px">
+          <span style="opacity:0.42;font-size:0.8rem">min</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeAddBook()">Cancel</button>
+      <button class="btn-save" onclick="saveBook()">Save Book ✨</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== THEME CONFIG =====
+const T = {
+  cosmos:{
+    realmName:'The Cosmos Realm',
+    heroEmoji:'🌙',
+    companions:['🦉','🌟','🔭'],
+    greets:(n)=>[`Star-reader ${n}, the cosmos awaits!`,`The constellations shine for you, ${n}.`,`Navigator ${n}, chart your course through the stars!`],
+    flavours:['Each chapter lights a new star in your sky.','The universe expands with every page you turn.','Ancient starlight carries the wisdom of stories.'],
+    sectionTitle:'🌙 My Tomes',
+    statLabels:['Tomes','Stars Lit','Galaxies'],
+    pathLabel:'✦ Constellation Map',
+    chIconBg:'☆', chIconDone:'✦',
+    flavourTexts:['The cosmos holds infinite stories — this one is yours to unlock.','In the vast silence of space, imagination travels faster than light.','Each chapter is a star charted on your celestial map.'],
+    progressLabel:'Stars Lit',remainLabel:'Stars Left',
+    detailDeco:'🌙',
+    celebEmoji:'🌟',celebTitle:'You reached the stars!',
+    celebConfetti:['🌟','⭐','💫','✨','🌙','🪐'],
+    nudgeEmoji:'⚡',
+  },
+  forest:{
+    realmName:'The Enchanted Forest',
+    heroEmoji:'🌿',
+    companions:['🦊','🍄','🦋'],
+    greets:(n)=>[`Welcome back, ${n} of the forest!`,`The woodland stirs, traveller ${n}.`,`The ancient trees whisper your name, ${n}!`],
+    flavours:['Every chapter is a stepping stone through the enchanted wood.','The forest creatures cheer as you read on.','A warm hearth and an open book — forest magic at its finest.'],
+    sectionTitle:'🌿 My Scrolls',
+    statLabels:['Scrolls','Steps Taken','Quests Done'],
+    pathLabel:'🍃 Forest Trail',
+    chIconBg:'○', chIconDone:'🌸',
+    flavourTexts:['Deep in the forest, a story waits behind every mossy stone.','The enchanted wood grows more wondrous with every page.','Follow the trail of fireflies. Each chapter lights the way.'],
+    progressLabel:'Steps Taken',remainLabel:'Steps Ahead',
+    detailDeco:'🌿',
+    celebEmoji:'🎉',celebTitle:'The forest rejoices!',
+    celebConfetti:['🌸','🍀','✨','🦋','🌿','🍃'],
+    nudgeEmoji:'🍂',
+  },
+  quest:{
+    realmName:'The Kingdom of Tales',
+    heroEmoji:'🏰',
+    companions:['🐉','⚔️','🛡️'],
+    greets:(n)=>[`Hail, brave ${n}! The chronicle awaits!`,`The kingdom needs you, hero ${n}!`,`Your legend grows with every page, ${n}!`],
+    flavours:['A true hero reads before charging into battle.','The mightiest weapon is a well-read mind.','Every chapter conquered is a mile closer to glory.'],
+    sectionTitle:'⚔️ My Chronicles',
+    statLabels:['Chronicles','Miles','Conquered'],
+    pathLabel:'🗺️ Quest Map',
+    chIconBg:'◇', chIconDone:'⚔️',
+    flavourTexts:['This chronicle holds secrets worthy of the bravest hero.','The quest is long, but every page brings you closer to legend.','Heroes are forged one chapter at a time.'],
+    progressLabel:'Miles Conquered',remainLabel:'Miles Ahead',
+    detailDeco:'🏰',
+    celebEmoji:'🏆',celebTitle:'Quest complete, hero!',
+    celebConfetti:['🏆','⚔️','🔥','💥','🌟','🛡️'],
+    nudgeEmoji:'⚠️',
+  }
+};
+
+const AVATARS=['🧙','🧝','🦄','🐉','🧚','🦊','🐺','🦁','🐸','🧸','🌟','🦋','🐬','🦅','🧜','🤴'];
+let state={name:'',avatar:'🧙',theme:'cosmos',books:[]};
+let currentBookId=null,editingBookId=null;
+
+function init(){
+  const saved=localStorage.getItem('readingQuest');
+  if(saved){state=JSON.parse(saved);applyTheme(state.theme);showHome();}
+  else{applyTheme('cosmos');renderAvatarPicker('avatarPicker',state.avatar);showScreen('onboarding');}
+}
+function save(){localStorage.setItem('readingQuest',JSON.stringify(state));}
+
+// THEME
+function applyTheme(th){
+  document.body.className=th;state.theme=th;
+  buildAmbience(th);
+  const h=document.getElementById('onboardHero');if(h)h.textContent=T[th].heroEmoji;
+}
+
+function buildAmbience(th){
+  const layer=document.getElementById('ambientLayer');layer.innerHTML='';
+  document.getElementById('cosmosMoon').style.display=th==='cosmos'?'block':'none';
+  document.getElementById('forestCanopy').style.display=th==='forest'?'block':'none';
+  document.getElementById('forestFloor').style.display=th==='forest'?'block':'none';
+  document.getElementById('questCastle').style.display=th==='quest'?'block':'none';
+
+  if(th==='cosmos'){
+    for(let i=0;i<95;i++){
+      const s=document.createElement('div');s.className='star';
+      const sz=Math.random()*2.4+0.6;
+      s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${2+Math.random()*4}s;--delay:${Math.random()*5}s;--mo:${0.12+Math.random()*0.55}`;
+      layer.appendChild(s);
+    }
+    for(let i=0;i<4;i++){
+      const ss=document.createElement('div');ss.className='shooting-star';
+      ss.style.cssText=`left:${5+Math.random()*45}%;top:${3+Math.random()*28}%;--dur:${6+Math.random()*9}s;--delay:${Math.random()*12}s`;
+      layer.appendChild(ss);
+    }
+  } else if(th==='forest'){
+    const floatItems=[{e:'🍃',op:.22},{e:'🌿',op:.18},{e:'✨',op:.28},{e:'🍀',op:.18},{e:'🌸',op:.2},{e:'🌺',op:.15}];
+    for(let i=0;i<16;i++){
+      const fi=floatItems[Math.floor(Math.random()*floatItems.length)];
+      const el=document.createElement('div');el.className='forest-float';el.textContent=fi.e;
+      el.style.cssText=`left:${Math.random()*92}%;top:${4+Math.random()*82}%;font-size:${9+Math.random()*11}px;--dur:${5+Math.random()*7}s;--delay:${Math.random()*6}s;--op:${fi.op};--r:${Math.random()*22-11}deg`;
+      layer.appendChild(el);
+    }
+    ['🌲','🌳','🌲','🌳','🌲','🌲'].forEach((t,i)=>{
+      const el=document.createElement('div');el.className='forest-tree-bg';el.textContent=t;
+      el.style.cssText=`left:${i*17+Math.random()*7}%;--sz:${52+Math.random()*32}px`;
+      layer.appendChild(el);
+    });
+  } else if(th==='quest'){
+    const sparks=[{e:'✨',op:.18},{e:'💫',op:.16},{e:'🔥',op:.13},{e:'⚡',op:.14},{e:'🌟',op:.12}];
+    for(let i=0;i<12;i++){
+      const sp=sparks[Math.floor(Math.random()*sparks.length)];
+      const el=document.createElement('div');el.className='quest-spark';el.textContent=sp.e;
+      el.style.cssText=`left:${Math.random()*88}%;top:${8+Math.random()*78}%;font-size:${9+Math.random()*9}px;--dur:${3.5+Math.random()*5}s;--delay:${Math.random()*5}s;--op:${sp.op}`;
+      layer.appendChild(el);
+    }
+  }
+}
+
+function selectTheme(th,el){
+  document.querySelectorAll('#onboarding .theme-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');applyTheme(th);
+  renderAvatarPicker('avatarPicker',state.avatar);
+}
+function selectThemeSettings(th,el){
+  document.querySelectorAll('#settings-modal .theme-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');applyTheme(th);
+}
+
+function renderAvatarPicker(cid,selected){
+  const c=document.getElementById(cid);if(!c)return;c.innerHTML='';
+  AVATARS.forEach(a=>{
+    const d=document.createElement('div');d.className='avatar-opt'+(a===selected?' selected':'');d.textContent=a;
+    d.onclick=()=>{c.querySelectorAll('.avatar-opt').forEach(x=>x.classList.remove('selected'));d.classList.add('selected');state.avatar=a;};
+    c.appendChild(d);
+  });
+}
+
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+function showHome(){renderHome();showScreen('home');}
+function showParentMode(){renderParentMode();showScreen('parent-mode');}
+function showSettings(){
+  const sn=document.getElementById('settingsName');if(sn)sn.value=state.name;
+  document.querySelectorAll('#settings-modal .theme-card').forEach(c=>c.classList.toggle('selected',c.dataset.theme===state.theme));
+  renderAvatarPicker('settingsAvatarPicker',state.avatar);showScreen('settings-modal');
+}
+
+// ONBOARDING
+const nameIn=document.getElementById('nameInput');
+if(nameIn){
+  nameIn.addEventListener('input',()=>{
+    const btn=document.getElementById('startBtn');if(btn)btn.disabled=nameIn.value.trim().length<1;
+    state.name=nameIn.value.trim();
+  });
+}
+function startAdventure(){
+  state.name=(document.getElementById('nameInput')||{}).value?.trim()||'';
+  if(!state.name)return;
+  const sel=document.querySelector('#avatarPicker .avatar-opt.selected');
+  if(sel)state.avatar=sel.textContent;
+  save();showHome();
+}
+
+// HOME
+function renderHome(){
+  const cfg=T[state.theme];
+  document.getElementById('headerAvatar').textContent=state.avatar;
+  document.getElementById('headerName').textContent=state.name;
+  document.getElementById('headerRealm').textContent=cfg.realmName;
+  document.getElementById('booksSectionTitle').textContent=cfg.sectionTitle;
+  cfg.statLabels.forEach((l,i)=>{const el=document.getElementById(`statLabel${i}`);if(el)el.textContent=l;});
+
+  // Companion — cycles daily
+  const di=Math.floor(Date.now()/86400000)%3;
+  document.getElementById('companionEmoji').textContent=cfg.companions[di];
+  document.getElementById('companionGreeting').textContent=cfg.greets(state.name)[di%cfg.greets(state.name).length];
+  document.getElementById('companionFlavour').textContent=cfg.flavours[di%cfg.flavours.length];
+
+  const totalCh=state.books.reduce((s,b)=>s+(b.doneChapters||[]).length,0);
+  const doneBks=state.books.filter(b=>isBookComplete(b)).length;
+  document.getElementById('statBooks').textContent=state.books.length;
+  document.getElementById('statChapters').textContent=totalCh;
+  document.getElementById('statDone').textContent=doneBks;
+
+  // Nudge
+  const nudgeEl=document.getElementById('nudgeBanner');
+  const behind=state.books.filter(b=>!isBookComplete(b)&&getDays(b)!==null&&getDays(b)<=3);
+  if(behind.length){
+    const b=behind[0];const d=getDays(b);
+    nudgeEl.innerHTML=`<span>${cfg.nudgeEmoji}</span><span>Lesson for <strong>"${b.title}"</strong> ${d<=0?'is today!':` in ${d} day${d===1?'':'s'}!`} Keep reading!</span>`;
+    nudgeEl.style.display='flex';nudgeEl.className='nudge-banner';
+  } else nudgeEl.style.display='none';
+
+  // Books: active first, completed at bottom
+  const list=document.getElementById('booksList');
+  if(!state.books.length){
+    list.innerHTML=`<div class="empty-state"><span class="empty-icon">${cfg.heroEmoji}</span><div class="empty-text">No ${cfg.statLabels[0].toLowerCase()} yet.<br>Ask a parent to add your reading list.</div></div>`;
+    return;
+  }
+  list.innerHTML='';
+  const active=state.books.filter(b=>!isBookComplete(b));
+  const done=state.books.filter(b=>isBookComplete(b));
+  [...active,...done].forEach(b=>list.appendChild(buildBookCard(b)));
+}
+
+function buildBookCard(b){
+  const cfg=T[state.theme];
+  const pct=getPct(b),isDone=isBookComplete(b),status=getStatus(b);
+  const card=document.createElement('div');card.className='book-card'+(isDone?' completed':'');
+  card.onclick=()=>showBookDetail(b.id);
+  const bkIcon={cosmos:'📖',forest:'📜',quest:'📜'}[state.theme];
+  const sMap={done:['status-done','✅ Complete'],ahead:['status-ahead','🚀 Ahead'],'on-track':['status-on-track','✔ On Track'],behind:['status-behind','⚡ Behind'],'not-started':['status-not-started','— Not Started']};
+  const [cls,lbl]=sMap[status]||sMap['not-started'];
+  const doneCh=(b.doneChapters||[]).length;
+  card.innerHTML=`
+    <div class="book-card-top">
+      <div class="book-icon-wrap">${bkIcon}</div>
+      <div class="book-info">
+        <div class="book-title">${b.title}</div>
+        ${b.author?`<div class="book-author">${b.author}</div>`:''}
+        <div class="book-meta">${b.chapters} chapters${b.audioPlatform?` · 🎧 ${b.audioPlatform}`:''}</div>
+      </div>
+      <span class="book-status-badge ${cls}">${lbl}</span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+    <div class="progress-text" style="margin-top:4px">${doneCh} of ${b.chapters} · ${Math.round(pct)}%</div>
+    <div class="book-footer">
+      <div class="lesson-date">${b.lessonDate?`📅 ${fmtDate(b.lessonDate)}`:'📅 No date'}</div>
+      ${b.audioPlatform&&b.audioDuration?`<div class="audiobook-tag">🎧 ${getTimeLeft(b)}</div>`:''}
+    </div>`;
+  return card;
+}
+
+// BOOK DETAIL
+function showBookDetail(id){
+  currentBookId=id;const b=state.books.find(x=>x.id===id);if(!b)return;
+  const cfg=T[state.theme];
+  document.getElementById('detailTitle').textContent=b.title;
+  document.getElementById('detailAuthor').textContent=b.author?`by ${b.author}`:'';
+  document.getElementById('detailDeco').textContent=cfg.detailDeco;
+  const fi=(b.doneChapters||[]).length%cfg.flavourTexts.length;
+  document.getElementById('detailFlavour').textContent=cfg.flavourTexts[fi];
+  const doneCh=(b.doneChapters||[]).length;
+  document.getElementById('detailProgress').textContent=doneCh;
+  document.getElementById('detailRemaining').textContent=b.chapters-doneCh;
+  document.getElementById('detailProgressLabel').textContent=cfg.progressLabel;
+  document.getElementById('detailRemainingLabel').textContent=cfg.remainLabel;
+
+  const dl=document.getElementById('detailDeadline');
+  if(b.lessonDate){
+    const d=getDays(b);const dcls=d<=0?'days-late':d<=5?'days-warn':'days-ok';
+    const dt=d<=0?'Today!':`${d} day${d===1?'':'s'} to go`;
+    dl.innerHTML=`<div><div class="deadline-label">First Lesson</div><div class="deadline-date">${fmtDate(b.lessonDate)}</div></div><div class="deadline-days ${dcls}">${dt}</div>`;
+  } else dl.innerHTML=`<div><div class="deadline-label">No lesson date set</div></div>`;
+
+  const ab=document.getElementById('detailAudiobook');
+  if(b.audioPlatform&&b.audioDuration){
+    const icons={Libby:'📚',Audible:'🎧',YouTube:'▶️'};
+    ab.innerHTML=`<div class="audiobook-info"><div class="ab-icon">${icons[b.audioPlatform]||'🎧'}</div><div><div class="ab-platform">${b.audioPlatform} · ${b.audioDuration} total</div><div class="ab-time">${getTimeLeft(b)} remaining</div></div></div>`;
+  } else ab.innerHTML='';
+
+  document.getElementById('questPathLabel').textContent=cfg.pathLabel;
+  buildGrid(b);showScreen('book-detail');
+}
+
+function buildGrid(b){
+  const cfg=T[state.theme];
+  const grid=document.getElementById('chaptersGrid');grid.innerHTML='';
+  const done=b.doneChapters||[];
+  for(let i=1;i<=b.chapters;i++){
+    const isDone=done.includes(i),isNext=!isDone&&(i===1||done.includes(i-1));
+    const s=document.createElement('div');
+    s.className='chapter-stone'+(isDone?' done':isNext?' current':'');
+    s.innerHTML=`<span class="ch-icon-bg">${cfg.chIconBg}</span><span class="ch-tick">${cfg.chIconDone}</span><span class="ch-num">${i}</span><span class="ch-label">Ch.</span>`;
+    s.onclick=()=>toggleCh(b.id,i);
+    grid.appendChild(s);
+  }
+}
+
+function toggleCh(bid,ch){
+  const b=state.books.find(x=>x.id===bid);if(!b)return;
+  if(!b.doneChapters)b.doneChapters=[];
+  const idx=b.doneChapters.indexOf(ch);
+  if(idx>=0){b.doneChapters.splice(idx,1);}
+  else{
+    b.doneChapters.push(ch);b.doneChapters.sort((a,b)=>a-b);
+    if(b.doneChapters.length===b.chapters){save();updateStats(b);buildGrid(b);showCelebration(b.title);return;}
+  }
+  save();updateStats(b);buildGrid(b);
+}
+
+function updateStats(b){
+  const cfg=T[state.theme];
+  const d=(b.doneChapters||[]).length;
+  document.getElementById('detailProgress').textContent=d;
+  document.getElementById('detailRemaining').textContent=b.chapters-d;
+  const fi=d%cfg.flavourTexts.length;
+  document.getElementById('detailFlavour').textContent=cfg.flavourTexts[fi];
+  const ab=document.getElementById('detailAudiobook');
+  if(b.audioPlatform&&b.audioDuration){const t=ab.querySelector('.ab-time');if(t)t.textContent=getTimeLeft(b)+' remaining';}
+}
+
+// CELEBRATION
+function showCelebration(title){
+  const cfg=T[state.theme];const e=cfg.celebConfetti;
+  for(let i=0;i<24;i++){
+    const c=document.createElement('div');c.className='confetti-piece';c.textContent=e[Math.floor(Math.random()*e.length)];
+    c.style.cssText=`left:${Math.random()*100}vw;--dur:${2+Math.random()*2.5}s;--delay:${Math.random()*1.2}s`;
+    document.body.appendChild(c);setTimeout(()=>c.remove(),5000);
+  }
+  const ov=document.createElement('div');ov.className='celebration-overlay';
+  ov.innerHTML=`<div class="celebration-card"><span class="celebration-emoji">${cfg.celebEmoji}</span><div class="celebration-title">${cfg.celebTitle}</div><p class="celebration-sub">You finished <strong>"${title}"</strong>!<br>You're ready for your lesson!</p><button class="btn-primary" onclick="this.closest('.celebration-overlay').remove();showBookDetail('${currentBookId}')">Continue ✨</button></div>`;
+  document.body.appendChild(ov);
+}
+
+// ADD BOOK
+function gv(id){const el=document.getElementById(id);return el?el.value:'';}
+function sv(id,val){const el=document.getElementById(id);if(el)el.value=val;}
+
+function showAddBook(id){
+  editingBookId=id||null;
+  const modal=document.getElementById('addBookModal');
+  const title=document.getElementById('modalTitle');
+  if(id){
+    const b=state.books.find(x=>x.id===id);if(!b)return;
+    title.textContent='✏️ Edit Book';
+    sv('bookTitleInput',b.title);sv('bookAuthorInput',b.author||'');sv('chaptersInput',b.chapters);
+    sv('lessonDateInput',b.lessonDate||'');sv('audioPlatform',b.audioPlatform||'');
+    const m=parseMins(b.audioDuration||'');sv('audioHours',m?Math.floor(m/60):'');sv('audioMinutes',m?m%60:'');
+  } else {
+    title.textContent='📖 Add a New Book';
+    ['bookTitleInput','bookAuthorInput','chaptersInput','lessonDateInput','audioPlatform','audioHours','audioMinutes'].forEach(x=>sv(x,''));
+    const lr=document.getElementById('lookupResult');if(lr)lr.classList.remove('show');
+  }
+  modal.style.display='flex';
+}
+function closeAddBook(){document.getElementById('addBookModal').style.display='none';editingBookId=null;}
+function closeModalOutside(e){if(e.target===document.getElementById('addBookModal'))closeAddBook();}
+
+async function lookupChapters(){
+  const title=gv('bookTitleInput').trim();const author=gv('bookAuthorInput').trim();
+  if(!title)return;
+  const btn=document.getElementById('lookupBtn');const result=document.getElementById('lookupResult');
+  if(btn){btn.disabled=true;btn.textContent='🔍 Looking up...';}
+  if(result)result.classList.remove('show');
+  try{
+    const query=author?`"${title}" by ${author}`:`"${title}"`;
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:200,
+        messages:[{role:'user',content:`How many chapters does the book ${query} have? Reply ONLY with JSON: {"chapters":17,"confidence":"high","note":"optional short note"}. If unsure, estimate and set confidence "low".`}]})});
+    const data=await resp.json();
+    const parsed=JSON.parse(data.content[0].text.replace(/```json|```/g,'').trim());
+    sv('chaptersInput',parsed.chapters);
+    if(result){result.innerHTML=`✅ ${parsed.chapters} chapters${parsed.note?` · ${parsed.note}`:''} <span style="opacity:0.5">(${parsed.confidence})</span>`;result.classList.add('show');}
+  }catch{if(result){result.innerHTML='⚠️ Could not look up automatically. Please enter manually.';result.classList.add('show');}}
+  if(btn){btn.disabled=false;btn.textContent='🔍 Auto-lookup chapter count (uses title + author)';}
+}
+
+function saveBook(){
+  const title=gv('bookTitleInput').trim(),author=gv('bookAuthorInput').trim();
+  const chapters=parseInt(gv('chaptersInput')),lessonDate=gv('lessonDateInput');
+  const audioPlatform=gv('audioPlatform');
+  const ah=parseInt(gv('audioHours'))||0,am=parseInt(gv('audioMinutes'))||0;
+  const audioDuration=(ah||am)?fmtMins(ah*60+am):'';
+  if(!title||!chapters||chapters<1){alert('Please enter a title and number of chapters.');return;}
+  if(editingBookId){
+    const b=state.books.find(x=>x.id===editingBookId);
+    if(b){Object.assign(b,{title,author,chapters,lessonDate,audioPlatform,audioDuration});
+      if(b.doneChapters)b.doneChapters=b.doneChapters.filter(c=>c<=chapters);}
+  } else {
+    state.books.push({id:Date.now().toString(),title,author,chapters,lessonDate,audioPlatform,audioDuration,doneChapters:[]});
+  }
+  save();closeAddBook();renderParentMode();
+}
+
+// PARENT
+function renderParentMode(){
+  const list=document.getElementById('parentBooksList');
+  if(!state.books.length){list.innerHTML=`<div class="empty-state"><span class="empty-icon">📚</span><div class="empty-text">No books yet. Add the first one!</div></div>`;return;}
+  list.innerHTML='';
+  state.books.forEach(b=>{
+    const card=document.createElement('div');card.className='parent-book-card';
+    const d=(b.doneChapters||[]).length;
+    card.innerHTML=`
+      <div class="parent-book-top">
+        <div><div class="parent-book-title">${b.title}</div>${b.author?`<div style="font-size:0.7rem;opacity:0.4;font-style:italic;margin-top:1px">${b.author}</div>`:''}</div>
+        <div class="parent-book-actions">
+          <button class="action-btn" onclick="showAddBook('${b.id}')">✏️</button>
+          <button class="action-btn delete" onclick="deleteBook('${b.id}')">🗑️</button>
+        </div>
+      </div>
+      <div style="font-size:0.76rem;opacity:0.46;margin-bottom:9px">${d}/${b.chapters} chapters · ${b.audioPlatform||'No audiobook'}</div>
+      <div class="reschedule-wrap">
+        <span class="reschedule-label">📅 Lesson:</span>
+        <input class="reschedule-input" type="date" value="${b.lessonDate||''}" onchange="reschedule('${b.id}',this.value)">
+      </div>`;
+    list.appendChild(card);
+  });
+}
+function deleteBook(id){if(!confirm('Delete this book and all its progress?'))return;state.books=state.books.filter(b=>b.id!==id);save();renderParentMode();}
+function reschedule(id,date){const b=state.books.find(x=>x.id===id);if(b){b.lessonDate=date;save();}}
+
+// SETTINGS
+function saveSettings(){
+  const n=(document.getElementById('settingsName')||{}).value?.trim()||'';if(!n)return;
+  state.name=n;const sel=document.querySelector('#settingsAvatarPicker .avatar-opt.selected');
+  if(sel)state.avatar=sel.textContent;save();showHome();
+}
+function resetApp(){if(!confirm('Delete everything and start over?'))return;localStorage.removeItem('readingQuest');location.reload();}
+
+// HELPERS
+function getPct(b){if(!b.chapters)return 0;return Math.min(100,((b.doneChapters||[]).length/b.chapters)*100);}
+function isBookComplete(b){return(b.doneChapters||[]).length>=b.chapters;}
+function getDays(b){
+  if(!b.lessonDate)return null;
+  const today=new Date();today.setHours(0,0,0,0);
+  return Math.ceil((new Date(b.lessonDate+'T00:00:00')-today)/(864e5));
+}
+function getStatus(b){
+  if(isBookComplete(b))return 'done';
+  const pct=getPct(b);if(pct===0)return 'not-started';
+  const d=getDays(b);if(d===null)return 'on-track';
+  const rem=b.chapters-(b.doneChapters||[]).length,needed=rem/(d||1);
+  if(d<=0)return pct<100?'behind':'done';
+  if(needed<=1)return 'ahead';if(needed<=2)return 'on-track';return 'behind';
+}
+function fmtDate(ds){if(!ds)return'';return new Date(ds+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+function parseMins(s){if(!s)return 0;const h=s.match(/(\d+)\s*h/i),m=s.match(/(\d+)\s*m/i);return(h?+h[1]*60:0)+(m?+m[1]:0);}
+function fmtMins(m){if(m<=0)return'0m';const h=Math.floor(m/60),mn=m%60;if(!h)return`${mn}m`;if(!mn)return`${h}h`;return`${h}h ${mn}m`;}
+function getTimeLeft(b){
+  const total=parseMins(b.audioDuration);if(!total)return b.audioDuration;
+  const done=(b.doneChapters||[]).length;return fmtMins(Math.round(total*(1-done/(b.chapters||1))));
+}
+
+init();
+</script>
+</body>
+</html>
