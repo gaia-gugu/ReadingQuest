@@ -1,3 +1,6 @@
+Reading quest · HTML
+Copy
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,28 +21,28 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:'Nunito',sans-serif;min-height:100vh;min-height:-webkit-fill-available;overflow-x:hidden;transition:background 0.6s ease}
-
+ 
 /* COSMOS */
 body.cosmos{background:var(--cosmos-bg);color:var(--cosmos-text)}
 body.cosmos::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background:radial-gradient(ellipse at 25% 15%,rgba(124,111,205,0.2) 0%,transparent 55%),
   radial-gradient(ellipse at 78% 88%,rgba(232,121,160,0.12) 0%,transparent 48%)}
-
+ 
 /* FOREST */
 body.forest{background:var(--forest-bg);color:var(--forest-text)}
 body.forest::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background:radial-gradient(ellipse at 50% 0%,rgba(50,90,15,0.4) 0%,transparent 55%),
   radial-gradient(ellipse at 100% 100%,rgba(200,140,50,0.07) 0%,transparent 40%)}
-
+ 
 /* QUEST */
 body.quest{background:var(--quest-bg);color:var(--quest-text)}
 body.quest::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background:radial-gradient(ellipse at 18% 18%,rgba(180,60,20,0.2) 0%,transparent 50%),
   radial-gradient(ellipse at 82% 82%,rgba(74,142,223,0.1) 0%,transparent 48%)}
-
+ 
 /* AMBIENT */
 .ambient-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-
+ 
 /* Stars */
 .star{position:absolute;border-radius:50%;background:#fff;
   animation:twinkle var(--dur,3s) ease-in-out infinite var(--delay,0s)}
@@ -49,16 +52,16 @@ body.quest::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:no
   animation:shoot var(--dur,7s) linear var(--delay,0s) infinite}
 @keyframes shoot{0%{transform:translate(0,0) scaleX(1);opacity:0}
   5%{opacity:1}20%{transform:translate(160px,160px) scaleX(30);opacity:0}100%{opacity:0}}
-
+ 
 /* Forest elements */
 .forest-float{position:absolute;animation:fFloat var(--dur,8s) ease-in-out infinite var(--delay,0s);opacity:var(--op,.3)}
 @keyframes fFloat{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-16px) rotate(calc(var(--r,0deg)+10deg))}}
 .forest-tree-bg{position:absolute;bottom:0;pointer-events:none;opacity:0.1;font-size:var(--sz,64px);line-height:1}
-
+ 
 /* Quest sparks */
 .quest-spark{position:absolute;animation:qSpark var(--dur,5s) ease-in-out infinite var(--delay,0s);opacity:var(--op,.2)}
 @keyframes qSpark{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-12px) scale(1.2)}}
-
+ 
 /* Cosmos moon orb */
 .cosmos-moon-orb{position:fixed;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;
   background:radial-gradient(circle at 38% 38%,#fef8c0,#e8c840 40%,#8a6010 100%);
@@ -66,22 +69,22 @@ body.quest::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:no
   box-shadow:0 0 80px 30px rgba(245,200,66,0.12);
   animation:moonPulse 7s ease-in-out infinite}
 @keyframes moonPulse{0%,100%{opacity:0.065}50%{opacity:0.09}}
-
+ 
 /* Forest canopy overlay */
 .forest-canopy-bar{position:fixed;top:0;left:0;right:0;height:70px;pointer-events:none;z-index:0;
   background:linear-gradient(to bottom,rgba(5,12,2,0.55),transparent)}
 .forest-floor-bar{position:fixed;bottom:0;left:0;right:0;height:100px;pointer-events:none;z-index:0;
   background:linear-gradient(to top,rgba(5,10,2,0.6),transparent)}
-
+ 
 /* Quest castle silhouette */
 .quest-castle-wrap{position:fixed;bottom:0;right:0;pointer-events:none;z-index:0;opacity:0.045;color:var(--quest-text)}
-
+ 
 /* LAYOUT */
 #app{position:relative;z-index:1;min-height:100vh}
 .screen{display:none;min-height:100vh;padding:20px;animation:fadeIn 0.45s ease}
 .screen.active{display:flex;flex-direction:column}
 @keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-
+ 
 /* ONBOARDING */
 #onboarding{justify-content:center;align-items:center;text-align:center;gap:26px;padding:36px 22px}
 .onboard-hero{font-size:5rem;display:block;animation:heroBob 2.5s ease-in-out infinite;
@@ -93,7 +96,7 @@ body.quest::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:no
   animation:shimmer 4s ease-in-out infinite}
 @keyframes shimmer{0%,100%{filter:brightness(1)}50%{filter:brightness(1.28)}}
 .onboard-sub{font-size:1rem;opacity:0.6;max-width:320px;line-height:1.65}
-
+ 
 .name-input-wrap{width:100%;max-width:320px}
 .name-input{width:100%;padding:16px 22px;background:rgba(255,255,255,0.13);
   border:2px solid rgba(255,255,255,0.26);border-radius:18px;
@@ -101,7 +104,7 @@ body.quest::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:no
   color:#fff;text-align:center;outline:none;transition:all 0.3s;-webkit-text-fill-color:#fff}
 .name-input:focus{border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.2)}
 .name-input::placeholder{color:rgba(255,255,255,0.38);-webkit-text-fill-color:rgba(255,255,255,0.38);font-weight:400}
-
+ 
 .theme-picker{width:100%;max-width:400px}
 .theme-picker h3{font-size:0.75rem;text-transform:uppercase;letter-spacing:2.5px;opacity:0.5;margin-bottom:12px}
 .theme-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
@@ -114,7 +117,7 @@ body.quest::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:no
 .theme-card[data-theme="cosmos"]{background:linear-gradient(145deg,rgba(10,10,28,0.9),rgba(124,111,205,0.22))}
 .theme-card[data-theme="forest"]{background:linear-gradient(145deg,rgba(12,18,6,0.9),rgba(122,191,94,0.18))}
 .theme-card[data-theme="quest"]{background:linear-gradient(145deg,rgba(18,8,28,0.9),rgba(212,90,40,0.2))}
-
+ 
 .avatar-picker{width:100%;max-width:400px}
 .avatar-picker h3{font-size:0.75rem;text-transform:uppercase;letter-spacing:2.5px;opacity:0.5;margin-bottom:12px}
 .avatars{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
@@ -122,7 +125,7 @@ body.quest::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:no
   display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.08);transition:all 0.3s}
 .avatar-opt:hover{transform:scale(1.1)}
 .avatar-opt.selected{border-color:rgba(255,255,255,0.65);background:rgba(255,255,255,0.18);transform:scale(1.15)}
-
+ 
 .btn-primary{padding:15px 42px;border-radius:50px;border:none;cursor:pointer;
   font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:800;transition:all 0.3s;letter-spacing:0.4px}
 body.cosmos .btn-primary{background:linear-gradient(135deg,var(--cosmos-accent),var(--cosmos-pink));color:#fff}
@@ -130,7 +133,7 @@ body.forest .btn-primary{background:linear-gradient(135deg,var(--forest-accent),
 body.quest .btn-primary{background:linear-gradient(135deg,var(--quest-accent),var(--quest-gold));color:#fff}
 .btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,0,0,0.35)}
 .btn-primary:disabled{opacity:0.28;transform:none;cursor:not-allowed}
-
+ 
 /* HEADER */
 .app-header{display:flex;align-items:center;justify-content:space-between;padding:12px 0 18px}
 .header-left{display:flex;align-items:center;gap:10px}
@@ -143,7 +146,7 @@ body.quest .btn-primary{background:linear-gradient(135deg,var(--quest-accent),va
   display:flex;align-items:center;justify-content:center;font-size:1.05rem;
   background:rgba(255,255,255,0.08);color:inherit;transition:all 0.2s}
 .icon-btn:hover{background:rgba(255,255,255,0.16);transform:scale(1.07)}
-
+ 
 /* COMPANION BAR */
 .companion-bar{border-radius:17px;padding:13px 15px;margin-bottom:18px;
   display:flex;align-items:center;gap:11px;border:1px solid rgba(255,255,255,0.08);position:relative;overflow:hidden}
@@ -154,7 +157,7 @@ body.quest .companion-bar{background:linear-gradient(135deg,rgba(212,90,40,0.13)
 @keyframes cBob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-5px) rotate(3deg)}}
 .companion-greeting{font-size:0.82rem;font-weight:700;line-height:1.4}
 .companion-flavour{font-size:0.7rem;opacity:0.52;margin-top:2px;font-style:italic}
-
+ 
 /* STATS */
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:22px}
 .stat-card{padding:13px 9px;border-radius:15px;background:rgba(255,255,255,0.05);
@@ -164,7 +167,7 @@ body.quest .companion-bar{background:linear-gradient(135deg,rgba(212,90,40,0.13)
 body.cosmos .stat-value{color:var(--cosmos-gold)}
 body.forest .stat-value{color:var(--forest-gold)}
 body.quest .stat-value{color:var(--quest-gold)}
-
+ 
 /* SECTION */
 .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
 .section-title{font-family:'Cinzel',serif;font-size:0.85rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;opacity:0.68}
@@ -172,7 +175,7 @@ body.quest .stat-value{color:var(--quest-gold)}
   background:rgba(255,255,255,0.05);color:inherit;cursor:pointer;
   font-family:'Nunito',sans-serif;font-size:0.8rem;font-weight:700;transition:all 0.2s}
 .btn-add:hover{background:rgba(255,255,255,0.12)}
-
+ 
 /* BOOK CARDS */
 .books-list{display:flex;flex-direction:column;gap:11px;flex:1;padding-bottom:22px}
 .book-card{padding:17px 17px 17px 22px;border-radius:19px;background:rgba(255,255,255,0.052);
@@ -194,7 +197,7 @@ body.quest .book-card.completed{border-color:rgba(240,184,48,0.18);background:rg
 body.cosmos .book-card.completed::before{background:var(--cosmos-gold)}
 body.forest .book-card.completed::before{background:var(--forest-gold)}
 body.quest .book-card.completed::before{background:var(--quest-gold)}
-
+ 
 .book-card-top{display:flex;align-items:flex-start;gap:11px;margin-bottom:11px}
 .book-icon-wrap{flex-shrink:0;width:42px;height:42px;border-radius:11px;
   display:flex;align-items:center;justify-content:center;font-size:1.7rem;
@@ -209,29 +212,29 @@ body.quest .book-card.completed::before{background:var(--quest-gold)}
 .status-ahead{background:rgba(100,150,255,0.14);color:#70a0ff}
 .status-done{background:rgba(200,150,50,0.18);color:#f5c842}
 .status-not-started{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.36)}
-
+ 
 .progress-bar-bg{height:6px;border-radius:10px;background:rgba(255,255,255,0.09);overflow:hidden;margin-bottom:5px}
 .progress-bar-fill{height:100%;border-radius:10px;transition:width 0.7s cubic-bezier(0.34,1.56,0.64,1)}
 body.cosmos .progress-bar-fill{background:linear-gradient(90deg,var(--cosmos-accent),var(--cosmos-pink))}
 body.forest .progress-bar-fill{background:linear-gradient(90deg,var(--forest-accent),var(--forest-gold))}
 body.quest .progress-bar-fill{background:linear-gradient(90deg,var(--quest-accent),var(--quest-gold))}
 .progress-text{font-size:0.7rem;opacity:0.52}
-
+ 
 .book-footer{display:flex;align-items:center;justify-content:space-between;margin-top:9px}
 .lesson-date{font-size:0.7rem;opacity:0.46}
 .audiobook-tag{font-size:0.66rem;opacity:0.42;display:flex;align-items:center;gap:3px}
-
+ 
 .empty-state{text-align:center;padding:48px 18px;opacity:0.42}
 .empty-icon{font-size:3.2rem;display:block;margin-bottom:12px}
 .empty-text{font-size:0.92rem;line-height:1.65}
-
+ 
 /* BOOK DETAIL */
 #book-detail{gap:0}
 .back-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:none;color:inherit;
   cursor:pointer;font-family:'Nunito',sans-serif;font-size:0.86rem;opacity:0.52;padding:0;
   margin-bottom:18px;transition:opacity 0.2s}
 .back-btn:hover{opacity:1}
-
+ 
 .detail-header-card{border-radius:21px;padding:20px 18px;margin-bottom:18px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.09)}
 body.cosmos .detail-header-card{background:linear-gradient(135deg,rgba(124,111,205,0.17),rgba(232,121,160,0.09))}
 body.forest .detail-header-card{background:linear-gradient(135deg,rgba(122,191,94,0.13),rgba(201,147,58,0.09))}
@@ -241,7 +244,7 @@ body.quest .detail-header-card{background:linear-gradient(135deg,rgba(212,90,40,
 .detail-book-author{font-size:0.8rem;opacity:0.46;font-style:italic;margin-bottom:9px}
 .detail-flavour{font-size:0.76rem;opacity:0.48;font-style:italic;line-height:1.55;
   border-left:2px solid rgba(255,255,255,0.14);padding-left:10px}
-
+ 
 .detail-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:16px}
 .detail-stat{padding:13px;border-radius:13px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.07)}
 .detail-stat-val{font-family:'Cinzel',serif;font-size:1.35rem;font-weight:700}
@@ -249,7 +252,7 @@ body.quest .detail-header-card{background:linear-gradient(135deg,rgba(212,90,40,
 body.cosmos .detail-stat-val{color:var(--cosmos-accent)}
 body.forest .detail-stat-val{color:var(--forest-accent)}
 body.quest .detail-stat-val{color:var(--quest-accent)}
-
+ 
 .lesson-deadline{padding:11px 15px;border-radius:13px;background:rgba(255,255,255,0.04);
   border:1px solid rgba(255,255,255,0.08);margin-bottom:16px;
   display:flex;align-items:center;justify-content:space-between}
@@ -257,17 +260,17 @@ body.quest .detail-stat-val{color:var(--quest-accent)}
 .deadline-date{font-family:'Cinzel',serif;font-size:0.92rem;font-weight:600;margin-top:2px}
 .deadline-days{font-size:0.8rem;font-weight:700}
 .days-ok{color:#6dc86d}.days-warn{color:#f5c842}.days-late{color:#ff7070}
-
+ 
 .audiobook-info{padding:11px 15px;border-radius:13px;background:rgba(255,255,255,0.04);
   border:1px solid rgba(255,255,255,0.07);margin-bottom:16px;display:flex;align-items:center;gap:9px}
 .ab-icon{font-size:1.3rem}
 .ab-platform{font-size:0.66rem;opacity:0.44;text-transform:uppercase;letter-spacing:1px}
 .ab-time{font-size:0.86rem;font-weight:700}
-
+ 
 /* QUEST PATH */
 .quest-path-header{display:flex;align-items:center;gap:8px;margin-bottom:14px}
 .quest-path-title{font-family:'Cinzel',serif;font-size:0.82rem;text-transform:uppercase;letter-spacing:2px;opacity:0.62}
-
+ 
 /* CHAPTER STONES */
 .chapters-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:8px;margin-bottom:26px}
 .chapter-stone{aspect-ratio:1;border-radius:13px;display:flex;flex-direction:column;
@@ -293,7 +296,7 @@ body.cosmos .chapter-stone.current{border-color:var(--cosmos-gold);box-shadow:0 
 body.forest .chapter-stone.current{border-color:var(--forest-gold);box-shadow:0 0 14px rgba(201,147,58,0.38)}
 body.quest .chapter-stone.current{border-color:var(--quest-gold);box-shadow:0 0 14px rgba(240,184,48,0.38)}
 @keyframes stonePulse{0%,100%{box-shadow:0 0 8px rgba(245,200,66,0.3)}50%{box-shadow:0 0 20px rgba(245,200,66,0.6)}}
-
+ 
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.75);
   display:flex;align-items:flex-end;justify-content:center;padding:14px;
@@ -331,7 +334,7 @@ body.cosmos .btn-save{background:linear-gradient(135deg,var(--cosmos-accent),var
 body.forest .btn-save{background:linear-gradient(135deg,var(--forest-accent),var(--forest-gold));color:#0c1508}
 body.quest .btn-save{background:linear-gradient(135deg,var(--quest-accent),var(--quest-gold))}
 .btn-save:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.3)}
-
+ 
 /* PARENT */
 #parent-mode{gap:0}
 .parent-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
@@ -351,13 +354,13 @@ body.quest .btn-save{background:linear-gradient(135deg,var(--quest-accent),var(-
 .reschedule-input{padding:6px 10px;background:rgba(255,255,255,0.07);
   border:1px solid rgba(255,255,255,0.1);border-radius:9px;
   font-family:'Nunito',sans-serif;font-size:0.86rem;color:inherit;outline:none}
-
+ 
 /* SETTINGS */
 #settings-modal{gap:0}
 .settings-section{margin-bottom:24px}
 .settings-title{font-family:'Cinzel',serif;font-size:1.25rem;font-weight:700;margin-bottom:20px}
 .settings-label{font-size:0.73rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;opacity:0.52;margin-bottom:10px;display:block}
-
+ 
 /* CELEBRATION */
 .celebration-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
   background:rgba(0,0,0,0.83);backdrop-filter:blur(14px);animation:fadeIn 0.38s ease}
@@ -374,25 +377,102 @@ body.quest .celebration-card{background:var(--quest-card);border:2px solid var(-
 .confetti-piece{position:fixed;pointer-events:none;z-index:210;font-size:1.35rem;
   animation:confettiFall var(--dur,3s) ease-in var(--delay,0s) forwards}
 @keyframes confettiFall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
-
+ 
 /* NUDGE */
 .nudge-banner{padding:10px 13px;border-radius:12px;background:rgba(255,80,80,0.1);
   border:1px solid rgba(255,80,80,0.2);color:#ff9090;font-size:0.8rem;font-weight:600;
   margin-bottom:13px;display:flex;align-items:center;gap:6px;animation:fadeIn 0.4s ease}
-
+ 
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.11);border-radius:3px}
-
+ 
 @media(min-width:600px){
   .screen{padding:24px 32px;max-width:560px;margin:0 auto}
   .chapters-grid{grid-template-columns:repeat(auto-fill,minmax(74px,1fr))}
 }
 @media(min-width:900px){.screen{padding:32px 44px;max-width:660px}}
+ 
+/* BULK UPLOAD */
+.bulk-toggle{width:100%;padding:11px 14px;border-radius:12px;
+  border:1px dashed rgba(255,255,255,0.18);background:rgba(255,255,255,0.04);
+  color:inherit;cursor:pointer;font-family:'Nunito',sans-serif;
+  font-size:0.86rem;font-weight:700;text-align:left;transition:all 0.2s;
+  display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.bulk-toggle:hover{background:rgba(255,255,255,0.09);border-color:rgba(255,255,255,0.3)}
+ 
+.bulk-panel{border-radius:18px;padding:18px;margin-bottom:16px;
+  border:1px solid rgba(255,255,255,0.1);animation:fadeIn 0.3s ease}
+body.cosmos .bulk-panel{background:rgba(124,111,205,0.08)}
+body.forest .bulk-panel{background:rgba(122,191,94,0.07)}
+body.quest .bulk-panel{background:rgba(212,90,40,0.08)}
+ 
+.bulk-instructions{font-size:0.76rem;opacity:0.55;line-height:1.6;margin-bottom:12px}
+.bulk-instructions code{background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:5px;font-size:0.74rem;font-family:monospace}
+.bulk-example{background:rgba(255,255,255,0.06);border-radius:10px;padding:10px 12px;
+  font-family:monospace;font-size:0.72rem;opacity:0.6;line-height:1.8;margin-bottom:12px;
+  white-space:pre;overflow-x:auto}
+ 
+.bulk-textarea{width:100%;min-height:120px;padding:12px 14px;
+  background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);
+  border-radius:12px;font-family:monospace;font-size:0.82rem;
+  color:inherit;outline:none;resize:vertical;transition:all 0.2s;line-height:1.6}
+.bulk-textarea:focus{border-color:rgba(255,255,255,0.28);background:rgba(255,255,255,0.1)}
+.bulk-textarea::placeholder{opacity:0.35;font-family:'Nunito',sans-serif}
+ 
+.bulk-actions{display:flex;gap:9px;margin-top:11px}
+.btn-bulk-parse{flex:1;padding:11px;border-radius:11px;border:none;cursor:pointer;
+  font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:800;color:#fff;transition:all 0.25s}
+body.cosmos .btn-bulk-parse{background:linear-gradient(135deg,var(--cosmos-accent),var(--cosmos-pink))}
+body.forest .btn-bulk-parse{background:linear-gradient(135deg,var(--forest-accent),var(--forest-gold));color:#0c1508}
+body.quest .btn-bulk-parse{background:linear-gradient(135deg,var(--quest-accent),var(--quest-gold))}
+.btn-bulk-parse:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,0.3)}
+.btn-bulk-clear{padding:11px 16px;border-radius:11px;border:1px solid rgba(255,255,255,0.13);
+  background:transparent;color:inherit;cursor:pointer;font-family:'Nunito',sans-serif;
+  font-size:0.88rem;font-weight:700;transition:all 0.2s}
+.btn-bulk-clear:hover{background:rgba(255,255,255,0.06)}
+ 
+/* Bulk preview */
+.bulk-preview{border-radius:16px;padding:16px;margin-bottom:16px;
+  border:1px solid rgba(255,255,255,0.1);animation:fadeIn 0.3s ease}
+body.cosmos .bulk-preview{background:rgba(124,111,205,0.07)}
+body.forest .bulk-preview{background:rgba(122,191,94,0.06)}
+body.quest .bulk-preview{background:rgba(212,90,40,0.07)}
+.bulk-preview-title{font-family:'Cinzel',serif;font-size:0.88rem;font-weight:600;
+  margin-bottom:12px;opacity:0.8}
+.bulk-preview-list{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;max-height:260px;overflow-y:auto}
+.bulk-preview-row{display:flex;align-items:center;gap:9px;padding:9px 11px;
+  border-radius:10px;background:rgba(255,255,255,0.05);font-size:0.8rem}
+.bulk-preview-row.lookup-pending{border:1px solid rgba(255,200,50,0.2)}
+.bulk-preview-row.lookup-done{border:1px solid rgba(100,200,100,0.2)}
+.bulk-preview-row.lookup-error{border:1px solid rgba(255,100,100,0.2)}
+.bpr-status{font-size:1rem;flex-shrink:0;width:20px;text-align:center}
+.bpr-info{flex:1;min-width:0}
+.bpr-title{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bpr-meta{font-size:0.7rem;opacity:0.5;margin-top:1px}
+.bpr-chapters{font-family:'Cinzel',serif;font-size:0.88rem;font-weight:700;flex-shrink:0}
+body.cosmos .bpr-chapters{color:var(--cosmos-gold)}
+body.forest .bpr-chapters{color:var(--forest-gold)}
+body.quest .bpr-chapters{color:var(--quest-gold)}
+ 
+.bulk-lookup-progress{padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.05);
+  font-size:0.8rem;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.lookup-spinner{width:14px;height:14px;border-radius:50%;
+  border:2px solid rgba(255,255,255,0.2);border-top-color:rgba(255,255,255,0.8);
+  animation:spin 0.7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+ 
+.bulk-save-btn{width:100%;padding:13px;border-radius:12px;border:none;cursor:pointer;
+  font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;color:#fff;transition:all 0.28s}
+body.cosmos .bulk-save-btn{background:linear-gradient(135deg,var(--cosmos-accent),var(--cosmos-pink))}
+body.forest .bulk-save-btn{background:linear-gradient(135deg,var(--forest-accent),var(--forest-gold));color:#0c1508}
+body.quest .bulk-save-btn{background:linear-gradient(135deg,var(--quest-accent),var(--quest-gold))}
+.bulk-save-btn:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,0.3)}
+.bulk-save-btn:disabled{opacity:0.35;transform:none;cursor:not-allowed}
 </style>
 </head>
 <body class="cosmos">
-
+ 
 <div class="ambient-layer" id="ambientLayer"></div>
 <div class="cosmos-moon-orb" id="cosmosMoon"></div>
 <div class="forest-canopy-bar" id="forestCanopy" style="display:none"></div>
@@ -406,9 +486,9 @@ body.quest .celebration-card{background:var(--quest-card);border:2px solid var(-
   <rect x="96" y="112" width="28" height="43" rx="14"/>
   <rect x="58" y="97" width="22" height="22" rx="11"/><rect x="140" y="97" width="22" height="22" rx="11"/>
 </svg>
-
+ 
 <div id="app">
-
+ 
 <!-- ONBOARDING -->
 <div id="onboarding" class="screen active">
   <span class="onboard-hero" id="onboardHero">🌙</span>
@@ -437,7 +517,7 @@ body.quest .celebration-card{background:var(--quest-card);border:2px solid var(-
   </div>
   <button class="btn-primary" id="startBtn" onclick="startAdventure()" disabled>Begin My Quest →</button>
 </div>
-
+ 
 <!-- HOME -->
 <div id="home" class="screen">
   <div class="app-header">
@@ -471,7 +551,7 @@ body.quest .celebration-card{background:var(--quest-card);border:2px solid var(-
   </div>
   <div class="books-list" id="booksList"></div>
 </div>
-
+ 
 <!-- BOOK DETAIL -->
 <div id="book-detail" class="screen">
   <button class="back-btn" onclick="showHome()">← Back</button>
@@ -492,20 +572,61 @@ body.quest .celebration-card{background:var(--quest-card);border:2px solid var(-
   </div>
   <div class="chapters-grid" id="chaptersGrid"></div>
 </div>
-
+ 
 <!-- PARENT MODE -->
 <div id="parent-mode" class="screen">
   <div class="parent-header">
     <div class="parent-title">🔑 Parent Mode</div>
     <button class="icon-btn" onclick="showHome()">✕</button>
   </div>
+ 
+  <!-- Bulk upload toggle -->
+  <button class="bulk-toggle" onclick="toggleBulkPanel()">
+    <span id="bulkToggleIcon">📋</span>
+    <span id="bulkToggleLabel">Bulk upload books from spreadsheet</span>
+  </button>
+ 
+  <!-- Bulk panel -->
+  <div id="bulkPanel" style="display:none">
+    <div class="bulk-panel">
+      <div class="bulk-instructions">
+        Paste rows copied from Numbers, Excel, or any spreadsheet. Each row = one book.<br>
+        Columns (in order): <code>Title</code> <code>Author</code> <code>Chapters</code> <code>Lesson Date</code> <code>Platform</code> <code>Duration</code><br>
+        Leave <strong>Chapters</strong> blank and it'll be looked up automatically. All other fields are optional.
+      </div>
+      <div class="bulk-example">The Hobbit	J.R.R. Tolkien		2025-09-01	Audible	11h 5m
+Matilda	Roald Dahl	13	2025-10-15		
+Charlotte's Web	E.B. White</div>
+      <textarea class="bulk-textarea" id="bulkTextarea" placeholder="Paste your rows here…"></textarea>
+      <div class="bulk-actions">
+        <button class="btn-bulk-parse" onclick="parseBulk()">Preview & Lookup →</button>
+        <button class="btn-bulk-clear" onclick="clearBulk()">Clear</button>
+      </div>
+    </div>
+ 
+    <!-- Preview section (hidden until parsed) -->
+    <div id="bulkPreviewSection" style="display:none">
+      <div class="bulk-preview">
+        <div class="bulk-preview-title" id="bulkPreviewTitle">📚 Ready to add</div>
+        <div id="bulkLookupProgress" style="display:none">
+          <div class="bulk-lookup-progress">
+            <div class="lookup-spinner"></div>
+            <span id="bulkLookupMsg">Looking up chapters…</span>
+          </div>
+        </div>
+        <div class="bulk-preview-list" id="bulkPreviewList"></div>
+        <button class="bulk-save-btn" id="bulkSaveBtn" onclick="saveBulk()" disabled>Add all books ✨</button>
+      </div>
+    </div>
+  </div>
+ 
   <div class="section-header">
     <div class="section-title">📚 Manage Books</div>
     <button class="btn-add" onclick="showAddBook()">+ Add Book</button>
   </div>
   <div class="parent-books" id="parentBooksList"></div>
 </div>
-
+ 
 <!-- SETTINGS -->
 <div id="settings-modal" class="screen">
   <div class="app-header">
@@ -533,9 +654,9 @@ body.quest .celebration-card{background:var(--quest-card);border:2px solid var(-
     <button onclick="resetApp()" style="background:none;border:none;color:#ff7070;cursor:pointer;font-family:'Nunito',sans-serif;font-size:0.86rem;font-weight:700;opacity:0.52">Reset all data</button>
   </div>
 </div>
-
+ 
 </div>
-
+ 
 <!-- ADD BOOK MODAL -->
 <div class="modal-overlay" id="addBookModal" style="display:none" onclick="closeModalOutside(event)">
   <div class="modal">
@@ -583,7 +704,7 @@ body.quest .celebration-card{background:var(--quest-card);border:2px solid var(-
     </div>
   </div>
 </div>
-
+ 
 <script>
 // ===== THEME CONFIG =====
 const T = {
@@ -639,32 +760,32 @@ const T = {
     nudgeEmoji:'⚠️',
   }
 };
-
+ 
 const AVATARS=['🧙','🧝','🦄','🐉','🧚','🦊','🐺','🦁','🐸','🧸','🌟','🦋','🐬','🦅','🧜','🤴'];
 let state={name:'',avatar:'🧙',theme:'cosmos',books:[]};
 let currentBookId=null,editingBookId=null;
-
+ 
 function init(){
   const saved=localStorage.getItem('readingQuest');
   if(saved){state=JSON.parse(saved);applyTheme(state.theme);showHome();}
   else{applyTheme('cosmos');renderAvatarPicker('avatarPicker',state.avatar);showScreen('onboarding');}
 }
 function save(){localStorage.setItem('readingQuest',JSON.stringify(state));}
-
+ 
 // THEME
 function applyTheme(th){
   document.body.className=th;state.theme=th;
   buildAmbience(th);
   const h=document.getElementById('onboardHero');if(h)h.textContent=T[th].heroEmoji;
 }
-
+ 
 function buildAmbience(th){
   const layer=document.getElementById('ambientLayer');layer.innerHTML='';
   document.getElementById('cosmosMoon').style.display=th==='cosmos'?'block':'none';
   document.getElementById('forestCanopy').style.display=th==='forest'?'block':'none';
   document.getElementById('forestFloor').style.display=th==='forest'?'block':'none';
   document.getElementById('questCastle').style.display=th==='quest'?'block':'none';
-
+ 
   if(th==='cosmos'){
     for(let i=0;i<95;i++){
       const s=document.createElement('div');s.className='star';
@@ -700,7 +821,7 @@ function buildAmbience(th){
     }
   }
 }
-
+ 
 function selectTheme(th,el){
   document.querySelectorAll('#onboarding .theme-card').forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected');applyTheme(th);
@@ -710,7 +831,7 @@ function selectThemeSettings(th,el){
   document.querySelectorAll('#settings-modal .theme-card').forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected');applyTheme(th);
 }
-
+ 
 function renderAvatarPicker(cid,selected){
   const c=document.getElementById(cid);if(!c)return;c.innerHTML='';
   AVATARS.forEach(a=>{
@@ -719,7 +840,7 @@ function renderAvatarPicker(cid,selected){
     c.appendChild(d);
   });
 }
-
+ 
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
 function showHome(){renderHome();showScreen('home');}
 function showParentMode(){renderParentMode();showScreen('parent-mode');}
@@ -728,7 +849,7 @@ function showSettings(){
   document.querySelectorAll('#settings-modal .theme-card').forEach(c=>c.classList.toggle('selected',c.dataset.theme===state.theme));
   renderAvatarPicker('settingsAvatarPicker',state.avatar);showScreen('settings-modal');
 }
-
+ 
 // ONBOARDING
 const nameIn=document.getElementById('nameInput');
 if(nameIn){
@@ -744,7 +865,7 @@ function startAdventure(){
   if(sel)state.avatar=sel.textContent;
   save();showHome();
 }
-
+ 
 // HOME
 function renderHome(){
   const cfg=T[state.theme];
@@ -753,19 +874,19 @@ function renderHome(){
   document.getElementById('headerRealm').textContent=cfg.realmName;
   document.getElementById('booksSectionTitle').textContent=cfg.sectionTitle;
   cfg.statLabels.forEach((l,i)=>{const el=document.getElementById(`statLabel${i}`);if(el)el.textContent=l;});
-
+ 
   // Companion — cycles daily
   const di=Math.floor(Date.now()/86400000)%3;
   document.getElementById('companionEmoji').textContent=cfg.companions[di];
   document.getElementById('companionGreeting').textContent=cfg.greets(state.name)[di%cfg.greets(state.name).length];
   document.getElementById('companionFlavour').textContent=cfg.flavours[di%cfg.flavours.length];
-
+ 
   const totalCh=state.books.reduce((s,b)=>s+(b.doneChapters||[]).length,0);
   const doneBks=state.books.filter(b=>isBookComplete(b)).length;
   document.getElementById('statBooks').textContent=state.books.length;
   document.getElementById('statChapters').textContent=totalCh;
   document.getElementById('statDone').textContent=doneBks;
-
+ 
   // Nudge
   const nudgeEl=document.getElementById('nudgeBanner');
   const behind=state.books.filter(b=>!isBookComplete(b)&&getDays(b)!==null&&getDays(b)<=3);
@@ -774,7 +895,7 @@ function renderHome(){
     nudgeEl.innerHTML=`<span>${cfg.nudgeEmoji}</span><span>Lesson for <strong>"${b.title}"</strong> ${d<=0?'is today!':` in ${d} day${d===1?'':'s'}!`} Keep reading!</span>`;
     nudgeEl.style.display='flex';nudgeEl.className='nudge-banner';
   } else nudgeEl.style.display='none';
-
+ 
   // Books: active first, completed at bottom
   const list=document.getElementById('booksList');
   if(!state.books.length){
@@ -786,7 +907,7 @@ function renderHome(){
   const done=state.books.filter(b=>isBookComplete(b));
   [...active,...done].forEach(b=>list.appendChild(buildBookCard(b)));
 }
-
+ 
 function buildBookCard(b){
   const cfg=T[state.theme];
   const pct=getPct(b),isDone=isBookComplete(b),status=getStatus(b);
@@ -814,7 +935,7 @@ function buildBookCard(b){
     </div>`;
   return card;
 }
-
+ 
 // BOOK DETAIL
 function showBookDetail(id){
   currentBookId=id;const b=state.books.find(x=>x.id===id);if(!b)return;
@@ -829,24 +950,24 @@ function showBookDetail(id){
   document.getElementById('detailRemaining').textContent=b.chapters-doneCh;
   document.getElementById('detailProgressLabel').textContent=cfg.progressLabel;
   document.getElementById('detailRemainingLabel').textContent=cfg.remainLabel;
-
+ 
   const dl=document.getElementById('detailDeadline');
   if(b.lessonDate){
     const d=getDays(b);const dcls=d<=0?'days-late':d<=5?'days-warn':'days-ok';
     const dt=d<=0?'Today!':`${d} day${d===1?'':'s'} to go`;
     dl.innerHTML=`<div><div class="deadline-label">First Lesson</div><div class="deadline-date">${fmtDate(b.lessonDate)}</div></div><div class="deadline-days ${dcls}">${dt}</div>`;
   } else dl.innerHTML=`<div><div class="deadline-label">No lesson date set</div></div>`;
-
+ 
   const ab=document.getElementById('detailAudiobook');
   if(b.audioPlatform&&b.audioDuration){
     const icons={Libby:'📚',Audible:'🎧',YouTube:'▶️'};
     ab.innerHTML=`<div class="audiobook-info"><div class="ab-icon">${icons[b.audioPlatform]||'🎧'}</div><div><div class="ab-platform">${b.audioPlatform} · ${b.audioDuration} total</div><div class="ab-time">${getTimeLeft(b)} remaining</div></div></div>`;
   } else ab.innerHTML='';
-
+ 
   document.getElementById('questPathLabel').textContent=cfg.pathLabel;
   buildGrid(b);showScreen('book-detail');
 }
-
+ 
 function buildGrid(b){
   const cfg=T[state.theme];
   const grid=document.getElementById('chaptersGrid');grid.innerHTML='';
@@ -860,7 +981,7 @@ function buildGrid(b){
     grid.appendChild(s);
   }
 }
-
+ 
 function toggleCh(bid,ch){
   const b=state.books.find(x=>x.id===bid);if(!b)return;
   if(!b.doneChapters)b.doneChapters=[];
@@ -872,7 +993,7 @@ function toggleCh(bid,ch){
   }
   save();updateStats(b);buildGrid(b);
 }
-
+ 
 function updateStats(b){
   const cfg=T[state.theme];
   const d=(b.doneChapters||[]).length;
@@ -883,7 +1004,7 @@ function updateStats(b){
   const ab=document.getElementById('detailAudiobook');
   if(b.audioPlatform&&b.audioDuration){const t=ab.querySelector('.ab-time');if(t)t.textContent=getTimeLeft(b)+' remaining';}
 }
-
+ 
 // CELEBRATION
 function showCelebration(title){
   const cfg=T[state.theme];const e=cfg.celebConfetti;
@@ -896,11 +1017,11 @@ function showCelebration(title){
   ov.innerHTML=`<div class="celebration-card"><span class="celebration-emoji">${cfg.celebEmoji}</span><div class="celebration-title">${cfg.celebTitle}</div><p class="celebration-sub">You finished <strong>"${title}"</strong>!<br>You're ready for your lesson!</p><button class="btn-primary" onclick="this.closest('.celebration-overlay').remove();showBookDetail('${currentBookId}')">Continue ✨</button></div>`;
   document.body.appendChild(ov);
 }
-
+ 
 // ADD BOOK
 function gv(id){const el=document.getElementById(id);return el?el.value:'';}
 function sv(id,val){const el=document.getElementById(id);if(el)el.value=val;}
-
+ 
 function showAddBook(id){
   editingBookId=id||null;
   const modal=document.getElementById('addBookModal');
@@ -920,7 +1041,7 @@ function showAddBook(id){
 }
 function closeAddBook(){document.getElementById('addBookModal').style.display='none';editingBookId=null;}
 function closeModalOutside(e){if(e.target===document.getElementById('addBookModal'))closeAddBook();}
-
+ 
 async function lookupChapters(){
   const title=gv('bookTitleInput').trim();const author=gv('bookAuthorInput').trim();
   if(!title)return;
@@ -939,7 +1060,7 @@ async function lookupChapters(){
   }catch{if(result){result.innerHTML='⚠️ Could not look up automatically. Please enter manually.';result.classList.add('show');}}
   if(btn){btn.disabled=false;btn.textContent='🔍 Auto-lookup chapter count (uses title + author)';}
 }
-
+ 
 function saveBook(){
   const title=gv('bookTitleInput').trim(),author=gv('bookAuthorInput').trim();
   const chapters=parseInt(gv('chaptersInput')),lessonDate=gv('lessonDateInput');
@@ -956,7 +1077,7 @@ function saveBook(){
   }
   save();closeAddBook();renderParentMode();
 }
-
+ 
 // PARENT
 function renderParentMode(){
   const list=document.getElementById('parentBooksList');
@@ -983,7 +1104,7 @@ function renderParentMode(){
 }
 function deleteBook(id){if(!confirm('Delete this book and all its progress?'))return;state.books=state.books.filter(b=>b.id!==id);save();renderParentMode();}
 function reschedule(id,date){const b=state.books.find(x=>x.id===id);if(b){b.lessonDate=date;save();}}
-
+ 
 // SETTINGS
 function saveSettings(){
   const n=(document.getElementById('settingsName')||{}).value?.trim()||'';if(!n)return;
@@ -991,7 +1112,7 @@ function saveSettings(){
   if(sel)state.avatar=sel.textContent;save();showHome();
 }
 function resetApp(){if(!confirm('Delete everything and start over?'))return;localStorage.removeItem('readingQuest');location.reload();}
-
+ 
 // HELPERS
 function getPct(b){if(!b.chapters)return 0;return Math.min(100,((b.doneChapters||[]).length/b.chapters)*100);}
 function isBookComplete(b){return(b.doneChapters||[]).length>=b.chapters;}
@@ -1015,8 +1136,212 @@ function getTimeLeft(b){
   const total=parseMins(b.audioDuration);if(!total)return b.audioDuration;
   const done=(b.doneChapters||[]).length;return fmtMins(Math.round(total*(1-done/(b.chapters||1))));
 }
-
+ 
+// ===== BULK UPLOAD =====
+let bulkParsed = [];
+ 
+function toggleBulkPanel() {
+  const panel = document.getElementById('bulkPanel');
+  const icon = document.getElementById('bulkToggleIcon');
+  const label = document.getElementById('bulkToggleLabel');
+  const open = panel.style.display === 'none';
+  panel.style.display = open ? 'block' : 'none';
+  icon.textContent = open ? '▼' : '📋';
+  label.textContent = open ? 'Hide bulk upload' : 'Bulk upload books from spreadsheet';
+  if (!open) {
+    clearBulk();
+  }
+}
+ 
+function clearBulk() {
+  const ta = document.getElementById('bulkTextarea');
+  if (ta) ta.value = '';
+  bulkParsed = [];
+  const ps = document.getElementById('bulkPreviewSection');
+  if (ps) ps.style.display = 'none';
+}
+ 
+function parseBulk() {
+  const raw = (document.getElementById('bulkTextarea') || {}).value || '';
+  const lines = raw.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+  if (!lines.length) { alert('Nothing to parse — paste some rows first.'); return; }
+ 
+  bulkParsed = lines.map(line => {
+    // Support both tab-separated (from spreadsheet) and comma-separated
+    const sep = line.includes('\t') ? '\t' : ',';
+    const cols = line.split(sep).map(c => c.trim().replace(/^["']|["']$/g, ''));
+    const title = cols[0] || '';
+    const author = cols[1] || '';
+    const chaptersRaw = cols[2] || '';
+    const chapters = chaptersRaw ? parseInt(chaptersRaw) : null;
+    const lessonDate = parseDate(cols[3] || '');
+    const audioPlatform = normalisePlatform(cols[4] || '');
+    const audioDuration = cols[5] || '';
+    return { title, author, chapters, lessonDate, audioPlatform, audioDuration,
+             needsLookup: !chapters, lookupStatus: 'pending', lookupError: false };
+  }).filter(b => b.title.length > 0);
+ 
+  if (!bulkParsed.length) { alert('Could not find any valid rows. Make sure each row has at least a title.'); return; }
+ 
+  renderBulkPreview();
+  document.getElementById('bulkPreviewSection').style.display = 'block';
+ 
+  // Auto-run lookups for books missing chapters
+  const needsLookup = bulkParsed.filter(b => b.needsLookup);
+  if (needsLookup.length > 0) {
+    runBulkLookups(needsLookup);
+  } else {
+    document.getElementById('bulkSaveBtn').disabled = false;
+    updateBulkPreviewTitle();
+  }
+}
+ 
+function parseDate(s) {
+  if (!s) return '';
+  // Already ISO
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+  // DD/MM/YYYY or DD-MM-YYYY
+  const dmy = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+  if (dmy) return `${dmy[3]}-${dmy[2].padStart(2,'0')}-${dmy[1].padStart(2,'0')}`;
+  // MM/DD/YYYY
+  const mdy = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+  if (mdy) return `${mdy[3]}-${mdy[1].padStart(2,'0')}-${mdy[2].padStart(2,'0')}`;
+  return '';
+}
+ 
+function normalisePlatform(s) {
+  if (!s) return '';
+  const l = s.toLowerCase();
+  if (l.includes('libby')) return 'Libby';
+  if (l.includes('audible')) return 'Audible';
+  if (l.includes('youtube') || l.includes('yt')) return 'YouTube';
+  return '';
+}
+ 
+function renderBulkPreview() {
+  const list = document.getElementById('bulkPreviewList');
+  list.innerHTML = '';
+  bulkParsed.forEach((b, i) => {
+    const row = document.createElement('div');
+    row.id = `bpr-${i}`;
+    row.className = 'bulk-preview-row' + (b.needsLookup ? ' lookup-pending' : ' lookup-done');
+    const statusIcon = b.needsLookup ? '🔍' : '✅';
+    const chText = b.chapters ? `${b.chapters} ch` : '?';
+    const meta = [b.author, b.lessonDate ? fmtDate(b.lessonDate) : '', b.audioPlatform].filter(Boolean).join(' · ');
+    row.innerHTML = `
+      <span class="bpr-status" id="bpr-status-${i}">${statusIcon}</span>
+      <div class="bpr-info">
+        <div class="bpr-title">${b.title}</div>
+        ${meta ? `<div class="bpr-meta">${meta}</div>` : ''}
+      </div>
+      <span class="bpr-chapters" id="bpr-ch-${i}">${chText}</span>`;
+    list.appendChild(row);
+  });
+  updateBulkPreviewTitle();
+}
+ 
+function updateBulkPreviewTitle() {
+  const total = bulkParsed.length;
+  const pending = bulkParsed.filter(b => b.needsLookup && b.lookupStatus === 'pending').length;
+  const el = document.getElementById('bulkPreviewTitle');
+  if (pending > 0) {
+    el.textContent = `🔍 Looking up ${pending} of ${total} books…`;
+  } else {
+    const errors = bulkParsed.filter(b => b.lookupError).length;
+    if (errors > 0) {
+      el.textContent = `⚠️ ${total - errors} ready, ${errors} need manual chapters`;
+    } else {
+      el.textContent = `✅ ${total} book${total !== 1 ? 's' : ''} ready to add`;
+    }
+  }
+}
+ 
+async function runBulkLookups(books) {
+  const progEl = document.getElementById('bulkLookupProgress');
+  const msgEl = document.getElementById('bulkLookupMsg');
+  const saveBtn = document.getElementById('bulkSaveBtn');
+  progEl.style.display = 'flex';
+  saveBtn.disabled = true;
+ 
+  for (let i = 0; i < books.length; i++) {
+    const b = books[i];
+    const globalIdx = bulkParsed.indexOf(b);
+    msgEl.textContent = `Looking up "${b.title}" (${i + 1} of ${books.length})…`;
+ 
+    // Update row to show spinner
+    const statusEl = document.getElementById(`bpr-status-${globalIdx}`);
+    if (statusEl) statusEl.textContent = '⏳';
+ 
+    try {
+      const query = b.author ? `"${b.title}" by ${b.author}` : `"${b.title}"`;
+      const resp = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514', max_tokens: 150,
+          messages: [{ role: 'user', content: `How many chapters does the book ${query} have? Reply ONLY with JSON: {"chapters":17}. If very unsure, give best estimate.` }]
+        })
+      });
+      const data = await resp.json();
+      const parsed = JSON.parse(data.content[0].text.replace(/```json|```/g, '').trim());
+      b.chapters = parsed.chapters;
+      b.lookupStatus = 'done';
+      b.lookupError = false;
+      if (statusEl) statusEl.textContent = '✅';
+      const chEl = document.getElementById(`bpr-ch-${globalIdx}`);
+      if (chEl) chEl.textContent = `${parsed.chapters} ch`;
+      const row = document.getElementById(`bpr-${globalIdx}`);
+      if (row) { row.classList.remove('lookup-pending'); row.classList.add('lookup-done'); }
+    } catch (err) {
+      b.lookupStatus = 'error';
+      b.lookupError = true;
+      if (statusEl) statusEl.textContent = '⚠️';
+      const row = document.getElementById(`bpr-${globalIdx}`);
+      if (row) { row.classList.remove('lookup-pending'); row.classList.add('lookup-error'); }
+    }
+    updateBulkPreviewTitle();
+  }
+ 
+  progEl.style.display = 'none';
+  // Enable save even if some had errors — those will be skipped with a warning
+  saveBtn.disabled = false;
+}
+ 
+function saveBulk() {
+  const valid = bulkParsed.filter(b => b.chapters && b.chapters > 0);
+  const skipped = bulkParsed.length - valid.length;
+ 
+  if (!valid.length) { alert('No books with valid chapter counts to save.'); return; }
+ 
+  valid.forEach(b => {
+    // Skip duplicates (same title + author already in list)
+    const exists = state.books.some(x =>
+      x.title.toLowerCase() === b.title.toLowerCase() &&
+      (x.author||'').toLowerCase() === (b.author||'').toLowerCase()
+    );
+    if (!exists) {
+      state.books.push({
+        id: Date.now().toString() + Math.random().toString(36).slice(2),
+        title: b.title, author: b.author || '',
+        chapters: b.chapters, lessonDate: b.lessonDate || '',
+        audioPlatform: b.audioPlatform || '', audioDuration: b.audioDuration || '',
+        doneChapters: []
+      });
+    }
+  });
+ 
+  save();
+  clearBulk();
+  toggleBulkPanel();
+  renderParentMode();
+ 
+  const msg = skipped > 0
+    ? `Added ${valid.length} book${valid.length !== 1 ? 's' : ''}! (${skipped} skipped — no chapter count)`
+    : `Added ${valid.length} book${valid.length !== 1 ? 's' : ''} successfully! ✨`;
+  alert(msg);
+}
+ 
 init();
 </script>
 </body>
 </html>
+ 
